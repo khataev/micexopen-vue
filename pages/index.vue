@@ -17,7 +17,7 @@
     </b-row>
     <!-- Табы -->
     <div class="error-area"></div>
-    <b-tabs content-class="mt-3">
+    <b-tabs content-class="mt-3" class="tabs-area">
       <b-tab title="Открытые позиции на дату">
         <StaticPositionsTab />
       </b-tab>
@@ -42,6 +42,20 @@ export default {
 </script>
 
 <style>
+.text-header {
+  margin-top: 7px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tabs-area {
+  margin-top: 20px;
+}
+
+.error-area {
+  color: red;
+}
+
 /* .container {
   margin: 0 auto;
   min-height: 100vh;

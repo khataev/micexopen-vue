@@ -2,17 +2,17 @@
   <div>
     <!-- Таблица с информацией об открытых позициях -->
     <div class="row table-row">
-      <div class="col-xs-7 col-sm-9 col-md-9 text-right text-header">
+      <b-col xs="7" sm="9" md="9" class="text-right text-header">
         Дата:
-      </div>
-      <div class="col-xs-3 col-sm-2 col-md-2">
+      </b-col>
+      <b-col xs="3" sm="2" md="2">
         <input id="datepicker" type="text" class="form-control" />
-      </div>
-      <div class="col-xs-1 col-sm-1 col-md-1">
-        <button id="show-static-btn" class="btn btn-info" type="submit">
+      </b-col>
+      <b-col xs="2" sm="1" md="1">
+        <b-btn id="show-static-btn" variant="info" type="submit">
           Показать
-        </button>
-      </div>
+        </b-btn>
+      </b-col>
     </div>
     <b-row>
       <div class="col-xs-12 col-sm-12 col-md-12 table-row">
