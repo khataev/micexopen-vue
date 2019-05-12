@@ -23,7 +23,7 @@
       </b-collapse>
     </b-navbar>
 
-    <!-- <nuxt /> -->
+    <nuxt />
 
     <!-- Instructions modal -->
     <InstructionsModal />
