@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="yandex-verification" content="2d946d542581bf1f"/>
+    <meta name="keywords" content="открытые позиции, ммвб, динамика, анализ, биржа, трейдинг, графическое представление, визуализация">
+    <meta name="description" content="Просмотр и анализ открытых позиций по производным финансовым инструментам на ММВБ в наглядном графическом представлении">
+    <link rel="stylesheet" href="css/style.css">
+    <link id="bs-css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link id="bsdp-css" rel="stylesheet"
+          href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="shortcut icon" href="http://micexopen.khataev.com/favicon.ico" type="image/x-icon">
+
+    <title>Открытые позиции на ММВБ. Удобный просмотр и визуализация</title>
+</head>
+
+<body>
+<div class="container">
+    <!-- TODO: Адаптивность к экранам разных устройств -->
+    <!-- Строка меню -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse navbar-right">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" data-toggle="modal" data-target="#instructionsModal">Инструкция</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#contactsModal">Связаться с автором</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#thanksModal" onclick="yaCounter40656204.reachGoal('thanks-tab'); return true;">Хочу отблагодарить!</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#usefulLinksModal" onclick="yaCounter40656204.reachGoal('useful-links-modal'); return true;">Плюшки от меня</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <p>Необходимость в данном ресурсе у автора перестала существовать. Если среди посетителей есть те, кому он полезен или очень необходим - прошу написать в личку. Для поддержания работоспособности ресурса необходимо всего лишь 200р на хостинг в месяц. При отсутствии таковых сервис будет погашен 01.04.2019</p>
+    </div>
+    <!-- Комбобокс с инструментами -->
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <select class="select-features-list" style="width: 100%">
+            </select>
+        </div>
+    </div>
+    <!-- Табы -->
+    <div class="row tabs-area">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#static">Открытые позиции на дату</a></li>
+            <li><a data-toggle="tab" href="#dynamic" onclick="yaCounter40656204.reachGoal('dynamics-tab'); return true;">Динамика открытых позиций</a></li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="error-area"></div>
+        <div id="static" class="tab-pane fade in active">
+            <!-- Таблица с информацией об открытых позициях -->
+            <div class="row table-row">
+                <div class="col-xs-7 col-sm-9 col-md-9 text-right text-header">
+                    Дата:
+                </div>
+                <div class="col-xs-3 col-sm-2 col-md-2">
+                    <input type="text" class="form-control" id="datepicker">
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1">
+                    <button id="show-static-btn" class="btn btn-info" type="submit">Показать</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 table-row">
+                    <table class="table table-bordered table-hover position-details-table">
+                        <col>
+                        <colgroup span="2"></colgroup>
+                        <colgroup span="2"></colgroup>
+                        <colgroup></colgroup>
+                        <thead>
+                        <tr>
+                            <td rowspan="2"></td>
+                            <th colspan="2" scope="colgroup">Физические лица</th>
+                            <th colspan="2" scope="colgroup">Юридические лица</th>
+                            <th rowspan="2" scope="colgroup">Совокупный объем открытых позиций</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Длинные позиции</th>
+                            <th scope="col">Короткие позиции</th>
+                            <th scope="col">Длинные позиции</th>
+                            <th scope="col">Короткие позиции</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <th scope="row">Количество договоров (контрактов), шт.</th>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Относительное изменение количества договоров (контрактов) по отношению к
+                                предыдущему
+                                дню, в %
+                            </th>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Количество лиц, имеющих открытые позиции</th>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Изменение количества договоров (контрактов) по отношению к предыдущему дню,
+                                шт.
+                            </th>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- Область с диаграммами -->
+            <div class="row chart-row">
+                <div class="col-xs-6 col-sm-6 col-md-6 chart-area">
+                    <canvas id="fizPositionChart"></canvas>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 chart-area">
+                    <canvas id="jurPositionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="dynamic" class="tab-pane fade">
+            <div class="row table-row">
+                <div class="col-xs-6 col-sm-6 col-md-6 text-right text-header">Интервал c:</div>
+                <div class="col-xs-2 col-sm-2 col-md-2">
+                    <input type="text" class="form-control" id="datepickerFrom">
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 text-center text-header"> по:</div>
+                <div class="col-xs-2 col-sm-2 col-md-2">
+                    <input type="text" class="form-control" id="datepickerTo">
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1">
+                    <button id="show-dynamics-btn" class="btn btn-info" type="submit" onclick="yaCounter40656204.reachGoal('show-dynamics-btn'); return true;">Показать</button>
+                </div>
+            </div>
+            <!-- Область с диаграммами -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
+                    <canvas id="openPositionsDynamicsChart" height="120"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
+                    <canvas id="openPositionsDynamicsChart2" height="120"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
+                    <div class="rates-error-border">
+                        <h3 class="rates-error text-center">Здесь должен быть график курса доллара. К сожалению, сервис
+                            в данный момент недоступен, либо произошла ошибка и я работаю над ее устранением</h3>
+                    </div>
+                    <canvas id="currencyRatesChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/template" class="feature-item-template-select">
+    <option value="<%= value %>">
+        <%= name %>
+    </option>
+</script>
+
+<!-- TODO: Think how to manage only data-name -->
+<script type="text/template" class="position-details">
+    <tr data-name="position">
+        <th scope="row">Количество договоров (контрактов), шт.</th>
+        <td class="rightCell">
+            <%= numberFormat(pos['position'].fiz_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['position'].fiz_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['position'].jur_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['position'].jur_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['position'].total) %>
+        </td>
+    </tr>
+    <tr data-name="change_prev_week_abs">
+        <th scope="row">Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.</th>
+        <td class="rightCell">
+            <%= numberFormat(pos['change_prev_week_abs'].fiz_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['change_prev_week_abs'].fiz_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['change_prev_week_abs'].jur_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['change_prev_week_abs'].jur_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['change_prev_week_abs'].total) %>
+        </td>
+    </tr>
+    <tr data-name="change_prev_week_perc">
+        <th scope="row">Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %
+        </th>
+        <td class="rightCell">
+            <%= numberFormatPerc(pos['change_prev_week_perc'].fiz_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormatPerc(pos['change_prev_week_perc'].fiz_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormatPerc(pos['change_prev_week_perc'].jur_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormatPerc(pos['change_prev_week_perc'].jur_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormatPerc(pos['change_prev_week_abs'].total / pos['position'].total ) %>
+        </td>
+    </tr>
+    <tr data-name="clients">
+        <th scope="row">Количество лиц, имеющих открытые позиции</th>
+        <td class="rightCell">
+            <%= numberFormat(pos['clients'].fiz_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['clients'].fiz_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['clients'].jur_long) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['clients'].jur_short) %>
+        </td>
+        <td class="rightCell">
+            <%= numberFormat(pos['clients'].total) %>
+        </td>
+    </tr>
+</script>
+
+<!-- Instructions modal -->
+<div class="modal fade" id="instructionsModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="instructionsModalLabel">Краткая инструкция</h4>
+            </div>
+            <div class="modal-body">
+                <p>Данная страничка является улучшенной (на мой взгляд автора) версией <a target="_blank"
+                                                                                          href="http://moex.com/ru/derivatives/open-positions.aspx">официальной
+                    статистики</a> по открытым позициям на ММВБ. Основная цель для меня была - знакомство с некоторыми
+                    web
+                    технологиями и этот мини проект показался хорошим кандидатом на эту роль. Поэтому, если у вас есть
+                    идеи по улучшению ее практической ценности - пишите, рад буду любым отзывам ;) Так же, не являясь
+                    специалистом по верстке, я попытался выжать из себя максимум для приемлемого отображения на
+                    различных мобильных устройствах, но результат еще далек от совершенства ))</p>
+                <br/>
+                <h5>Открытые позиции на дату</h5>
+                <p>Необходимо выбрать нужный инструмент и дату и нажать кнопку <strong>Показать</strong>. Комбобокс
+                    поможет найти нужный инструмент - просто начните вводить его имя. Круговые
+                    диаграммы соответствуют каждой строке заполненой таблицы, после загрузки - это первая строка. Для
+                    визуализации выбранной строки необходимо кликнуть на ней.</p>
+                <h5>Динамика открытых позиций </h5>
+                <p>Дает возможность проследить изменение показателя "Количество контрактов" в разрезе физ и юрлиц за
+                    период. А так же сопоставить с изменением курса доллара (ЦБ). Первый запрос за период может
+                    подтормаживать и график курса USD появится с задержкой.</p>
+                <p><strong>upd от 27.11.2016:</strong> На график курса доллара добавлены данные о цене закрытия торгов по инструменту
+                    USDRUB_TOM. В этом наборе данных отсутствует последний торговый день (если запрошен в периоде),
+                    похоже, это особенности сервиса ММВБ, выясняю.</p>
+                <br/>
+                <p>ps: данный сайт живет пока на самом простом тарифном плане хостинг-провайдера, поэтому просьба
+                    проявлять терпение к возможным задержкам и "задумчивости" :)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Все ясно!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contacts modal -->
+<div class="modal fade" id="contactsModal" tabindex="-1" role="dialog" aria-labelledby="contactsModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="contactsModalLabel">Я в сети</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><p>В чате <a target="_blank" href="https://gitter.im/micexopen/Lobby">Gitter</a>
+                    <li><p>На форуме <a target="_blank" href="http://www.banki.ru/profile/?action=profile&UID=823120">banki.ru</a>
+                    </p></li>
+                    <li><p>На форуме <a target="_blank"
+                                        href="http://octavtrading.forum.wtf/messages.php?action=new&uid=69">octavtrading.forum.wtf</a>
+                    </p></li>
+                    <li><p><a target="_blank" href="https://vk.com/khataev">Вконтакте</a></p></li>
+                    <li><p><a target="_blank"
+                              href="https://www.facebook.com/profile.php?id=100006483577333">Facebook</a></p></li>
+                    <li><p>Или просто напишите мне на <a target="_blank"
+                              href="mailto:admin@khataev.com">почту</a></p></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thanks modal -->
+<div class="modal fade" id="thanksModal" tabindex="-1" role="dialog" aria-labelledby="thanksModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="contactsModalLabel">Место отправки благодарностей</h4>
+            </div>
+            <div class="modal-body">
+                <div class="yandex-payment">
+                    <iframe frameborder="0" allowtransparency="true" scrolling="no" src="https://money.yandex.ru/quickpay/shop-widget?account=4100186996407&quickpay=shop&payment-type-choice=on&mobile-payment-type-choice=on&writer=buyer&targets-hint=%D0%91%D1%83%D0%B4%D1%83+%D1%80%D0%B0%D0%B4+%D1%82%D0%B5%D0%BF%D0%BB%D1%8B%D0%BC+%D1%81%D0%BB%D0%BE%D0%B2%D0%B0%D0%BC+%3A)&default-sum=500&button-text=03&successURL=http%3A%2F%2Fmicexopen.khataev.com%2F" width="450" height="210"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Useful links modal -->
+<div class="modal fade" id="usefulLinksModal" tabindex="-1" role="dialog" aria-labelledby="usefulLinksModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="contactsModalLabel">Всякие полезности</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nobullet">
+                    <li><img width="15" height="15" src="https://www.digitalocean.com/favicon-97c70234.png">&nbsp;<a href="http://digitalocean.khataev.com" target="_blank" onclick="yaCounter40656204.reachGoal('digital-ocean-link'); return true;">Хостинг для программистов на DigitalOсean. $10 в подарок!</a></li>
+                    <li><img width="15" height="15" src="https://skyeng.ru/assets/base/blocks/__gl/favicon/favicon-16x16.png">&nbsp;<a href="https://skyeng.ru/invite/4e7a67324f544177?utm_source=copy" target="_blank" onclick="yaCounter40656204.reachGoal('skyeng-link'); return true;">2 урока в школе английского языка skyeng.ru в подарок!</a></li>
+                    <li><strong>Скоро!</strong> Инвайт линк в кэшбек сервис winwinpeople capital</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter40656204 = new Ya.Metrika({
+                    id: 40656204,
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true,
+                    webvisor: true
+                });
+            } catch (e) {
+            }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript>
+    <div><img src="https://mc.yandex.ru/watch/40656204" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/underscore.string/dist/underscore.string.min.js"></script>
+<script src="bower_components/backbone/backbone.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/select2/dist/js/select2.min.js"></script>
+<script src="bower_components/papaparse/papaparse.min.js"></script>
+<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ru.min.js"
+        charset="UTF-8"></script>
+<script src="bower_components/moment/min/moment.min.js"></script>
+<script src="bower_components/chart.js/dist/Chart.min.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/apicalls.js"></script>
+
+</html>
