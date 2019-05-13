@@ -12,7 +12,13 @@
     <!-- Комбобокс с инструментами -->
     <b-row>
       <b-col xs="12" sm="12" md="12">
-        <select class="select-features-list" style="width: 100%"> </select>
+        <v-select
+          class="select-features-list"
+          :clearable="true"
+          :searchable="true"
+          :filterable="true"
+          :close-on-select="true"
+        />
       </b-col>
     </b-row>
     <!-- Табы -->
@@ -54,6 +60,15 @@ export default {
 
 .error-area {
   color: red;
+}
+
+.table-row {
+  margin-top: 20px;
+}
+
+.select-features-list {
+  margin-top: 20px;
+  width: 100%;
 }
 
 /* .container {

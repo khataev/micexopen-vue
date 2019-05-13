@@ -15,9 +15,15 @@
       </b-col>
     </div>
     <b-row>
-      <div class="col-xs-12 col-sm-12 col-md-12 table-row">
-        <b-table bordered hover position-details-table>
-          <thead>
+      <b-col xs="12" sm="12" md="12" class="table-row">
+        <b-table bordered hover position-details-table :items="tableItems">
+          <template name="table-colgroup ">
+            <col />
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup></colgroup>
+          </template>
+          <template slot="thead-top">
             <tr>
               <td rowspan="2"></td>
               <th colspan="2" scope="colgroup">Физические лица</th>
@@ -32,47 +38,9 @@
               <th scope="col">Длинные позиции</th>
               <th scope="col">Короткие позиции</th>
             </tr>
-          </thead>
-          <tr>
-            <th scope="row">Количество договоров (контрактов), шт.</th>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">
-              Относительное изменение количества договоров (контрактов) по
-              отношению к предыдущему дню, в %
-            </th>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">Количество лиц, имеющих открытые позиции</th>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <th scope="row">
-              Изменение количества договоров (контрактов) по отношению к
-              предыдущему дню, шт.
-            </th>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
+          </template>
         </b-table>
-      </div>
+      </b-col>
     </b-row>
     <!-- Область с диаграммами -->
     <div class="row chart-row">
@@ -85,3 +53,54 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      tableItems: [
+        {
+          name: 'Количество договоров (контрактов), шт.',
+          fiz_long: '-',
+          fiz_short: '-',
+          jur_long: '-',
+          jur_short: '-',
+          total: '-'
+        },
+        {
+          name:
+            'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
+          fiz_long: '-',
+          fiz_short: '-',
+          jur_long: '-',
+          jur_short: '-',
+          total: '-'
+        },
+        {
+          name: 'Количество лиц, имеющих открытые позиции',
+          fiz_long: '-',
+          fiz_short: '-',
+          jur_long: '-',
+          jur_short: '-',
+          total: '-'
+        },
+        {
+          name:
+            'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
+          fiz_long: '-',
+          fiz_short: '-',
+          jur_long: '-',
+          jur_short: '-',
+          total: '-'
+        }
+      ]
+    }
+  }
+}
+</script>
+
+<style>
+thead > tr:nth-child(3) {
+  display: none;
+}
+</style>
