@@ -16,7 +16,6 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
-    "bootstrap-datepicker": "^1.8.0",
     "bootstrap-vue": "^2.0.0-rc.19",
     "chartjs": "^0.3.24",
     "cross-env": "^5.2.0",
@@ -26,7 +25,8 @@
     "papaparse": "^4.6.3",
     "underscore": "^1.9.1",
     "underscore.string": "^3.3.5",
-    "vue-select": "^3.1.0"
+    "vue-select": "^3.1.0",
+    "vuejs-datepicker": "^1.5.4"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

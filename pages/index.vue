@@ -18,6 +18,7 @@
           :searchable="true"
           :filterable="true"
           :close-on-select="true"
+          :placeholder="selectPlaceholder"
         />
       </b-col>
     </b-row>
@@ -43,6 +44,11 @@ export default {
   components: {
     StaticPositionsTab,
     DynamicPositionsTab
+  },
+  data() {
+    return {
+      selectPlaceholder: ' Загрузка...'
+    }
   }
 }
 </script>

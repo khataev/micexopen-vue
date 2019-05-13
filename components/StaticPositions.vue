@@ -6,7 +6,14 @@
         Дата:
       </b-col>
       <b-col xs="3" sm="2" md="2">
-        <input id="datepicker" type="text" class="form-control" />
+        <!-- <input id="datepicker" type="text" class="form-control" /> -->
+        <DatePicker
+          :language="datePicker.language"
+          :monday-first="datePicker.mondayFirst"
+          :disabled-dates="datePicker.disabledDates"
+          :highlighted="datePicker.highlightedDates"
+          :format="datePicker.format"
+        />
       </b-col>
       <b-col xs="2" sm="1" md="1">
         <b-btn id="show-static-btn" variant="info" type="submit">
@@ -55,9 +62,39 @@
 </template>
 
 <script>
+// import DateTimePicker from '~/components/DateTimePicker.vue'
+import DatePicker from 'vuejs-datepicker'
+import { ru } from 'vuejs-datepicker/dist/locale'
+
 export default {
+  components: {
+    DatePicker
+    // DateTimePicker
+  },
   data() {
     return {
+      datePicker: {
+        language: ru,
+        disabledDates: {
+          days: [6, 0]
+        },
+        highlightedDates: {
+          dates: [new Date()],
+          // customPredictor: function(date) {
+          //   const today = new Date()
+
+          //   return (
+          //     date &&
+          //     today.year === date.year &&
+          //     today.month === date.month &&
+          //     today.day === date.day
+          //   )
+          // },
+          includeDisabled: true
+        },
+        mondayFirst: true,
+        format: 'dd.MM.yyyy'
+      },
       tableItems: [
         {
           name: 'Количество договоров (контрактов), шт.',
