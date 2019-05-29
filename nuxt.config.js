@@ -35,7 +35,10 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~plugins/vue-select.js', ssr: false }],
+  plugins: [
+    { src: '~plugins/vue-select.js', ssr: false }
+    // { src: '~plugins/datetime-picker.js', ssr: false }
+  ],
 
   /*
    ** Nuxt.js modules
@@ -58,6 +61,8 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    // https://github.com/charliekassel/vuejs-datepicker/issues/491
+    transpile: ['vuejs-datepicker'],
     /*
      ** You can extend webpack config here
      */
@@ -67,7 +72,7 @@ module.exports = {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
+          // loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
       }

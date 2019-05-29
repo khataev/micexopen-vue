@@ -13,7 +13,9 @@
     <b-row>
       <b-col xs="12" sm="12" md="12">
         <v-select
+          v-model="selectedFeature"
           class="select-features-list"
+          :options="featuresListRaw"
           :clearable="true"
           :searchable="true"
           :filterable="true"
@@ -22,15 +24,23 @@
         />
       </b-col>
     </b-row>
+
+    <!-- Область для показа ошибки -->
+    <div class="error-area">{{ errorText }}</div>
+
     <!-- Табы -->
-    <div class="error-area"></div>
     <b-tabs content-class="mt-3" class="tabs-area">
       <b-tab title="Открытые позиции на дату">
-        <StaticPositionsTab />
+        <StaticPositionsTab
+          :start-date="startDate"
+          :feature="selectedFeature"
+          :open-positions="openPositions"
+          @error="onError"
+        />
       </b-tab>
 
       <b-tab title="Динамика открытых позиций">
-        <DynamicPositionsTab />
+        <DynamicPositionsTab @error="onError" />
       </b-tab>
     </b-tabs>
   </div>
@@ -40,6 +50,11 @@
 import StaticPositionsTab from '~/components/StaticPositions.vue'
 import DynamicPositionsTab from '~/components/DynamicPositions.vue'
 
+// import app from './../plugins/scripts'
+import { Moex } from './../plugins/moex'
+
+const moex = new Moex()
+
 export default {
   components: {
     StaticPositionsTab,
@@ -47,13 +62,58 @@ export default {
   },
   data() {
     return {
-      selectPlaceholder: ' Загрузка...'
+      selectPlaceholder: ' Загрузка...',
+      errorText: null,
+      startDate: moex.getPreviousTradingDay(),
+      // Feature items dropdown
+      featuresListRaw: [],
+      selectedFeature: null,
+      openPositions: null
+    }
+  },
+  watch: {
+    selectedFeature: function(val) {
+      console.log('SELECTED', this.selectedFeature)
+    }
+  },
+  mounted() {
+    // const date1 = moex.getPreviousTradingDay().toISOString()
+    self = this // TODO: try avoid context hoisting with arrow function
+    const onComplete = function(openPositions) {
+      self.openPositions = openPositions
+
+      for (const key in openPositions) {
+        if (typeof openPositions[key] === 'function') continue
+
+        // console.log(app.openPositions[key].toJSON());
+        self.featuresListRaw.push({
+          code: key,
+          // text: openPositions[key].toJSON().name
+          label: openPositions[key].name
+        })
+      }
+      self.selectedFeature = self.featuresListRaw.filter(
+        feature => feature.code === 'Si_F'
+      )[0]
+    }
+    moex.loadMoexCsv(this.startDate.format('YYYYMMDD')).then(onComplete)
+    // scripts.loadData(scripts.getPreviousTradingDay(), null)
+  },
+  methods: {
+    onError: function(value) {
+      this.errorText = value
     }
   }
 }
 </script>
 
 <style>
+/* TODO: scoped */
+body {
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size: 14px;
+}
 .text-header {
   margin-top: 7px;
   font-size: 16px;
