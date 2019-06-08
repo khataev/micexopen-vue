@@ -31,22 +31,30 @@
     <!-- Табы -->
     <b-tabs content-class="mt-3" class="tabs-area">
       <b-tab title="Открытые позиции на дату">
+        <!-- :open-positions="openPositions" -->
         <StaticPositionsTab
-          :start-date="startDate"
           :feature="selectedFeature"
-          :open-positions="openPositions"
+          :start-date="startDate"
+          :show-button-enabled="!!selectedFeature"
           @error="onError"
         />
       </b-tab>
 
       <b-tab title="Динамика открытых позиций">
-        <DynamicPositionsTab @error="onError" />
+        <DynamicPositionsTab
+          :feature="selectedFeature"
+          :from-date="startDate"
+          :to-date="startDate"
+          :show-button-enabled="!!selectedFeature"
+          @error="onError"
+        />
       </b-tab>
     </b-tabs>
   </div>
 </template>
 
 <script>
+// TODO: Yandex metrica
 import StaticPositionsTab from '~/components/StaticPositions.vue'
 import DynamicPositionsTab from '~/components/DynamicPositions.vue'
 

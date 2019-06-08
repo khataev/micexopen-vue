@@ -1,7 +1,10 @@
 'use strict'
 
+import api from './apicalls'
+
 const moment = require('moment')
 const Papa = require('papaparse')
+
 // const _ = require('underscore')
 
 const DirectionPositions = function({
@@ -161,6 +164,95 @@ export const Moex = function() {
       })
     })
   }
+
+  this.openPositionsDynamics = null
+  // TODO: кажется, не используется нигде
+  // Массив обработанных дней в периоде - необходим для синхронизации асинхронных потоков загрузки csv с основным
+  this.workingPeriodSync = null
+
+  // Функция аккумулирования загруженных на дату открытых позиций в хэш-массиве
+  this.accumulateCsv = function(openPositions) {
+    const defElementCode = 'Si_F' // TODO: find more elegant way
+    // структурированные данные из объекта на дату добавляем в хэш-массив
+    // TODO: why moment could be nil?
+    const moment =
+      openPositions[defElementCode] && openPositions[defElementCode].moment
+    if (!moment || moment === '') return
+    // this.openPositionsDynamics[openPositions.data[0].moment] = openPositions
+    this.openPositionsDynamics[moment] = openPositions
+
+    // TODO: render
+    // app.renderDynamicDataPortion(app.openPositions)
+
+    // отметим день, который обработали
+    this.workingPeriodSync.pop()
+    // if (app.workingPeriodSync.length == 0)
+    //     app.renderDynamics();
+  }
+
+  // Загрузка данных за период и отображение на странице
+  this.loadDataPeriod = function(
+    momentFrom,
+    momentTo,
+    // TODO: how to get rid of this params?
+    eachChunkProcessCallback,
+    ratesProcessCallback,
+    errorCallback
+  ) {
+    const currentMoment = moment(momentFrom)
+
+    this.openPositionsDynamics = {}
+    // Отрисовываем пустой график
+    // charts.ChartMan.drawOpenPositionsDynamicsChart()
+    // charts.ChartMan.drawOpenPositionsDynamicsChart2()
+
+    const self = this
+    // Заполнение массива для синхронизации потоков
+    this.workingPeriodSync = []
+    const currentMomentDup = moment(momentFrom)
+    while (
+      currentMomentDup.isBefore(momentTo, 'day') ||
+      currentMomentDup.isSame(momentTo, 'day')
+    ) {
+      if (currentMomentDup.day() > 0 && currentMomentDup.day() < 7) {
+        this.workingPeriodSync.push(currentMomentDup.format('YYYYMMDD'))
+      }
+      currentMomentDup.add(1, 'day')
+    }
+
+    // загрузка данных с ММВБ по открытым позициям за период
+    while (
+      currentMoment.isBefore(momentTo, 'day') ||
+      currentMoment.isSame(momentTo, 'day')
+    ) {
+      if (currentMoment.day() > 0 && currentMoment.day() < 6) {
+        this.loadMoexCsv(currentMoment.format('YYYYMMDD'))
+          .then(openPositions => {
+            self.accumulateCsv(openPositions)
+
+            return openPositions
+          })
+          .then(eachChunkProcessCallback)
+      }
+      currentMoment.add(1, 'day')
+    }
+
+    // загрузка курсов USD за период
+    // TODO: разнести загрузку и отображение
+    // this.loadUsdRates(momentFrom, momentTo)
+    api
+      .getUSDRatesJSON(momentFrom, momentTo)
+      .then(usdRates => {
+        api
+          .getSpotUSDRatesJSON(momentFrom, momentTo)
+          .then(spotUsdRates => {
+            ratesProcessCallback(usdRates.data, spotUsdRates.data)
+          })
+          .catch(errorCallback)
+      })
+      .catch(errorCallback)
+  }
+
   this.getForHoliday = function(mnt) {
     if (mnt.isSame('2016-11-06', 'day')) return moment('2016-11-03')
     if (mnt.isSame('2016-11-07', 'day')) return moment('2016-11-03')

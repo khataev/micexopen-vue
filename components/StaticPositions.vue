@@ -21,6 +21,7 @@
           id="show-static-btn"
           variant="info"
           type="submit"
+          :disabled="!showButtonEnabled"
           @click="showOpenPositions"
         >
           Показать
@@ -36,6 +37,7 @@
           primary-key="code"
           :items="tableItems"
           :fields="tableFields"
+          :busy="tableBusy"
           @row-clicked="onRowClicked"
         >
           <template name="table-colgroup ">
@@ -60,6 +62,7 @@
               <th scope="col">Короткие позиции</th>
             </tr>
           </template>
+
           <!--
             // const fmt = '0,0'
       const fmt = code === 'changePrevWeekPerc' ? '0.00' : '0,0'
@@ -157,11 +160,15 @@ export default {
         return moment()
       }
     },
-    openPositions: {
-      type: Object,
-      default: function() {
-        return null
-      }
+    // openPositions: {
+    //   type: Object,
+    //   default: function() {
+    //     return null
+    //   }
+    // },
+    showButtonEnabled: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -259,7 +266,8 @@ export default {
       jurChartTitle: 'Юридические лица, %',
       JurChartData: {},
       showChart: false,
-      innerOpenPositions: this.openPositions
+      tableBusy: false
+      // innerOpenPositions: this.openPositions
     }
   },
   computed: {
@@ -268,19 +276,22 @@ export default {
     }
   },
   watch: {
-    openPositions: function(val) {
-      this.innerOpenPositions = val
-    },
+    // openPositions: function(val) {
+    //   this.innerOpenPositions = val
+    // },
     datePickerValue: function(val) {
       console.log('datePickerValue', val)
 
-      moex.loadMoexCsv(moment(val).format('YYYYMMDD')).then(openPositions => {
-        this.innerOpenPositions = openPositions
-        // this.showOpenPositions()
-      })
+      // moex
+      // .loadMoexCsv(moment(val).format('YYYYMMDD'))
+      // .then(openPositions => {
+      //   this.innerOpenPositions = openPositions
+      //   // this.showOpenPositions()
+      // })
     }
   },
   mounted() {
+    console.log('AXIOS', this.$axios)
     this.setNumeralSettings()
     // TODO: why moment.toDate() is not a date
     // console.log(typeof date)
@@ -368,13 +379,24 @@ export default {
       this.tableItems = []
     },
     showOpenPositions: function() {
-      console.log(1, this.innerOpenPositions)
-      if (!this.innerOpenPositions) return
-      console.log(2, this.fizChartTitle)
-      console.log(this.feature.code)
+      // console.log(1, this.innerOpenPositions)
+      // if (!this.innerOpenPositions) return
+      // console.log(2, this.fizChartTitle)
+      // console.log(this.feature.code)
 
-      this.transformPositionsData(this.innerOpenPositions[this.feature.code])
-      this.updateChartData('position')
+      this.tableBusy = true
+      const self = this
+      moex
+        // .loadMoexCsv(this.startDate.format('YYYYMMDD'))
+        .loadMoexCsv(moment(this.datePickerValue).format('YYYYMMDD'))
+        .then(openPositions => {
+          self.transformPositionsData(openPositions[self.feature.code])
+          self.tableBusy = false
+          self.updateChartData('position')
+        })
+
+      // this.transformPositionsData(this.innerOpenPositions[this.feature.code])
+      // this.updateChartData('position')
     },
     setNumeralSettings: function() {
       const locale = {
