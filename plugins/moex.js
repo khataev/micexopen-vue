@@ -1,6 +1,6 @@
 'use strict'
 
-import { MOEX_CSV_BASE_URL, INITIAL_FEATURE_CODE } from './config'
+import { MOEX_CSV_BASE_URL } from './config'
 import api from './apicalls'
 
 const moment = require('moment')
@@ -149,18 +149,6 @@ export const Moex = function() {
     })
   }
 
-  this.openPositionsDynamics = null
-
-  // Функция аккумулирования загруженных на дату открытых позиций в хэш-массиве
-  this.accumulateCsv = function(openPositions) {
-    const moment =
-      openPositions[INITIAL_FEATURE_CODE] &&
-      openPositions[INITIAL_FEATURE_CODE].moment
-    if (!moment || moment === '') return
-
-    this.openPositionsDynamics[moment] = openPositions
-  }
-
   // Загрузка данных за период и отображение на странице
   this.loadDataPeriod = function(
     momentFrom,
@@ -192,11 +180,6 @@ export const Moex = function() {
     ) {
       if (currentMoment.day() > 0 && currentMoment.day() < 6) {
         this.loadMoexCsv(currentMoment.format('YYYYMMDD'))
-          .then(openPositions => {
-            self.accumulateCsv(openPositions)
-
-            return openPositions
-          })
           .then(eachChunkProcessCallback)
           .catch(errorCallback)
       }
@@ -217,10 +200,6 @@ export const Moex = function() {
           .catch(errorCallback)
       })
       .catch(errorCallback)
-  }
-
-  this.getToday = function() {
-    return moment()
   }
 
   this.getPreviousTradingDay = function(date = moment(), _holidaysCache) {
@@ -245,6 +224,25 @@ export const Moex = function() {
     //   : result
 
     return result
+  }
+
+  this.makeTransformedRow = function(
+    code,
+    name,
+    fizLong,
+    fizShort,
+    jurLong,
+    jurShort
+  ) {
+    return {
+      code: code,
+      name: name,
+      fizLong: fizLong,
+      fizShort: fizShort,
+      jurLong: jurLong,
+      jurShort: jurShort,
+      total: fizLong + fizShort + jurLong + jurShort
+    }
   }
 }
 // // module.exports = new Moex()

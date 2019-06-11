@@ -5,7 +5,6 @@
         Интервал c:
       </b-col>
       <b-col xs="2" sm="2" md="2">
-        <!-- <input id="datepickerFrom" type="text" class="form-control" /> -->
         <DatePicker
           id="datepickerFrom"
           v-model="datePicker.fromValue"
@@ -20,7 +19,6 @@
         по:
       </b-col>
       <b-col xs="2" sm="2" md="2">
-        <!-- <input id="datepickerTo" type="text" class="form-control" /> -->
         <DatePicker
           id="datepickerTo"
           v-model="datePicker.toValue"
@@ -46,10 +44,8 @@
     <!-- Область с диаграммами -->
     <b-row>
       <b-col xs="12" sm="12" md="12" class="chart-area">
-        <!-- <canvas id="openPositionsDynamicsChart" height="120"></canvas> -->
         <line-chart
           v-if="showChart"
-          id="openPositionsDynamicsChart"
           :height="chartHeight"
           :chart-data="longPercChartData"
           :options="longChartOptions(longPercTitle)"
@@ -58,11 +54,8 @@
     </b-row>
     <b-row>
       <b-col xs="12" sm="12" md="12" class="chart-area">
-        <!-- <canvas id="openPositionsDynamicsChart2" height="120"></canvas> -->
-        <!-- TODO: rename id -->
         <line-chart
           v-if="showChart"
-          id="openPositionsDynamicsChart2"
           :height="chartHeight"
           :chart-data="longAbsChartData"
           :options="longChartOptions(longAbsTitle)"
@@ -71,18 +64,8 @@
     </b-row>
     <b-row>
       <b-col xs="12" sm="12" md="12" class="chart-area">
-        <div class="rates-error-border">
-          <!-- TODO: return error handling -->
-          <!-- <h3 class="rates-error text-center">
-            Здесь должен быть график курса доллара. К сожалению, сервис в данный
-            момент недоступен, либо произошла ошибка и я работаю над ее
-            устранением
-          </h3> -->
-        </div>
-        <!-- <canvas id="currencyRatesChart" height="120"></canvas> -->
         <line-chart
           v-if="showChart"
-          id="currencyRatesChart"
           :height="chartHeight"
           :title="longAbsTitle"
           :chart-data="ratesChartData"
@@ -119,14 +102,12 @@ const initialRatesDataSet = function() {
   return dataSet
 }
 
-// TODO: eliminate duplication
+// dummy headers, as we need only long data dynamics
 const tableRowHeaders = {
-  position: 'Количество договоров (контрактов), шт.',
-  changePrevWeekAbs:
-    'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
-  changePrevWeekPerc:
-    'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
-  clients: 'Количество лиц, имеющих открытые позиции'
+  position: '',
+  changePrevWeekAbs: '',
+  changePrevWeekPerc: '',
+  clients: ''
 }
 
 export default {
@@ -218,18 +199,7 @@ export default {
     }
   },
   methods: {
-    // TODO: eliminate duplication with Static positions component
-    makeRow: function(code, name, fizLong, fizShort, jurLong, jurShort) {
-      return {
-        code: code,
-        name: name,
-        fizLong: fizLong,
-        fizShort: fizShort,
-        jurLong: jurLong,
-        jurShort: jurShort,
-        total: fizLong + fizShort + jurLong + jurShort
-      }
-    },
+    makeRow: moex.makeTransformedRow,
     transformPositionsData: function(positionsModel) {
       if (!positionsModel) return
 

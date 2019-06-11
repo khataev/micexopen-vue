@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { INITIAL_FEATURE_CODE } from './../plugins/config'
+
 import StaticPositionsTab from '~/components/StaticPositions.vue'
 import DynamicPositionsTab from '~/components/DynamicPositions.vue'
 
@@ -117,7 +119,7 @@ export default {
         })
       }
       this.selectedFeature = this.featuresListRaw.filter(
-        feature => feature.code === 'Si_F'
+        feature => feature.code === INITIAL_FEATURE_CODE
       )[0]
     },
     // TODO: propagating errors from child components (Static/DynamicPositions)

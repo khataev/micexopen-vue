@@ -113,15 +113,6 @@ const numeral = require('numeral')
 const moment = require('moment')
 const moex = new Moex()
 
-const tableRowHeaders = {
-  position: 'Количество договоров (контрактов), шт.',
-  changePrevWeekAbs:
-    'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
-  changePrevWeekPerc:
-    'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
-  clients: 'Количество лиц, имеющих открытые позиции'
-}
-
 // const moex = require('./../plugins/moex.js')
 
 // const date = new Date(2016, 8, 16)
@@ -140,6 +131,15 @@ const tableRowHeaders = {
 // console.log(date3 instanceof Date)
 
 // console.log('----------------------')
+
+const tableRowHeaders = {
+  position: 'Количество договоров (контрактов), шт.',
+  changePrevWeekAbs:
+    'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
+  changePrevWeekPerc:
+    'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
+  clients: 'Количество лиц, имеющих открытые позиции'
+}
 
 export default {
   components: {
@@ -191,22 +191,6 @@ export default {
         format: 'dd.MM.yyyy',
         value: this.startDate.toISOString()
       },
-      // TODO: union in one object?
-      // tableRowHeadersPosition: 'Количество договоров (контрактов), шт.',
-      // tableRowHeadersChangePrevWeekAbs:
-      //   'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
-      // tableRowHeadersChangePrevWeekPerc:
-      //   'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
-      // tableRowHeadersClients: 'Количество лиц, имеющих открытые позиции',
-      // --
-      // tableRowHeaders: {
-      //   position: 'Количество договоров (контрактов), шт.',
-      //   changePrevWeekAbs:
-      //     'Изменение количества договоров (контрактов) по отношению к предыдущему дню, шт.',
-      //   changePrevWeekPerc:
-      //     'Относительное изменение количества договоров (контрактов) по отношению к предыдущему дню, в %',
-      //   clients: 'Количество лиц, имеющих открытые позиции'
-      // },
       tableFields: [
         { key: 'name' },
         { key: 'fizLong', tdClass: 'rightCell' },
@@ -291,17 +275,7 @@ export default {
     onRowClicked: function(selectedItem) {
       this.updateChartData(selectedItem.code)
     },
-    makeRow: function(code, name, fizLong, fizShort, jurLong, jurShort) {
-      return {
-        code: code,
-        name: name,
-        fizLong: fizLong,
-        fizShort: fizShort,
-        jurLong: jurLong,
-        jurShort: jurShort,
-        total: fizLong + fizShort + jurLong + jurShort
-      }
-    },
+    makeRow: moex.makeTransformedRow,
     transformPositionsData: function(positionsModel) {
       if (!positionsModel) return
 
