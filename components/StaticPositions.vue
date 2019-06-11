@@ -160,12 +160,6 @@ export default {
         return moment()
       }
     },
-    // openPositions: {
-    //   type: Object,
-    //   default: function() {
-    //     return null
-    //   }
-    // },
     showButtonEnabled: {
       type: Boolean,
       default: false
@@ -196,8 +190,6 @@ export default {
         mondayFirst: true,
         format: 'dd.MM.yyyy',
         value: this.startDate.toISOString()
-        // value: app.getPreviousTradingDay().toDate(),
-        // selectedValue: ''
       },
       // TODO: union in one object?
       // tableRowHeadersPosition: 'Количество договоров (контрактов), шт.',
@@ -275,23 +267,8 @@ export default {
       return this.datePicker.value
     }
   },
-  watch: {
-    // openPositions: function(val) {
-    //   this.innerOpenPositions = val
-    // },
-    datePickerValue: function(val) {
-      console.log('datePickerValue', val)
-
-      // moex
-      // .loadMoexCsv(moment(val).format('YYYYMMDD'))
-      // .then(openPositions => {
-      //   this.innerOpenPositions = openPositions
-      //   // this.showOpenPositions()
-      // })
-    }
-  },
   mounted() {
-    console.log('AXIOS', this.$axios)
+    // console.log('AXIOS', this.$axios)
     this.setNumeralSettings()
     // TODO: why moment.toDate() is not a date
     // console.log(typeof date)
@@ -379,24 +356,16 @@ export default {
       this.tableItems = []
     },
     showOpenPositions: function() {
-      // console.log(1, this.innerOpenPositions)
-      // if (!this.innerOpenPositions) return
-      // console.log(2, this.fizChartTitle)
-      // console.log(this.feature.code)
-
       this.tableBusy = true
       const self = this
       moex
-        // .loadMoexCsv(this.startDate.format('YYYYMMDD'))
         .loadMoexCsv(moment(this.datePickerValue).format('YYYYMMDD'))
         .then(openPositions => {
           self.transformPositionsData(openPositions[self.feature.code])
           self.tableBusy = false
           self.updateChartData('position')
         })
-
-      // this.transformPositionsData(this.innerOpenPositions[this.feature.code])
-      // this.updateChartData('position')
+        .catch(error => this.$emit('error', error))
     },
     setNumeralSettings: function() {
       const locale = {

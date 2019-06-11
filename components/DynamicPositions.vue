@@ -50,10 +50,9 @@
         <line-chart
           v-if="showChart"
           id="openPositionsDynamicsChart"
-          :height="120"
-          :title="longPercTitle"
+          :height="chartHeight"
           :chart-data="longPercChartData"
-          :options="longOptions()"
+          :options="longChartOptions(longPercTitle)"
         ></line-chart>
       </b-col>
     </b-row>
@@ -64,10 +63,9 @@
         <line-chart
           v-if="showChart"
           id="openPositionsDynamicsChart2"
-          :height="120"
-          :title="longAbsTitle"
+          :height="chartHeight"
           :chart-data="longAbsChartData"
-          :options="longOptions()"
+          :options="longChartOptions(longAbsTitle)"
         ></line-chart>
       </b-col>
     </b-row>
@@ -85,10 +83,10 @@
         <line-chart
           v-if="showChart"
           id="currencyRatesChart"
-          :height="120"
+          :height="chartHeight"
           :title="longAbsTitle"
           :chart-data="ratesChartData"
-          :options="ratesOptions()"
+          :options="ratesChartOptions()"
         ></line-chart>
       </b-col>
     </b-row>
@@ -190,65 +188,24 @@ export default {
         format: 'dd.MM.yyyy',
         fromValue: this.fromDate.toISOString(),
         toValue: this.toDate.toISOString()
-        // value: app.getPreviousTradingDay().toDate(),
-        // selectedValue: ''
       },
-      // Изначальные данные для графика за период
+      // Initial data sets
       longPercData: initialDynamicDataSet(),
       longAbsData: initialDynamicDataSet(),
-      // Изначальные данные для графика курсов валют
       ratesData: initialRatesDataSet(),
+      // Chart titles
       longPercTitle: 'Доля лонгов в общем количестве КОНТРАКТОВ, %',
       longAbsTitle: 'Количество лонговых контрактов, шт.',
-      ratesTitle: 'Курс доллара',
-      showChart: true,
-      // TODO: this.title refactor
-      longOptions() {
-        return {
-          title: {
-            display: true,
-            text: this.title
-          },
-          scales: {
-            xAxes: [
-              {
-                type: 'time',
-                time: {
-                  unit: 'week'
-                }
-              }
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true
-                }
-              }
-            ]
-          }
-        }
-      },
-      ratesOptions() {
-        return {
-          title: {
-            display: true,
-            text: this.title
-          },
-          scales: {
-            xAxes: [
-              {
-                type: 'time',
-                time: {
-                  unit: 'week'
-                }
-              }
-            ]
-          }
-        }
-      },
+      // Charts options
+      longChartOptions: charts.longChartOptions,
+      ratesChartOptions: charts.ratesChartOptions,
+      // ChartData objects
       longPercChartData: charts.getDynamicData({}),
       longAbsChartData: charts.getDynamicData({}),
-      ratesChartData: charts.getRatesData({})
+      ratesChartData: charts.getRatesData({}),
+
+      showChart: true,
+      chartHeight: 165
     }
   },
   computed: {
@@ -259,10 +216,6 @@ export default {
     datePickerToValue() {
       return this.datePicker.toValue
     }
-    // dynamicData() {
-    //   debugger
-    //   return { datasets: this.dynamicDatasets }
-    // }
   },
   methods: {
     // TODO: eliminate duplication with Static positions component
@@ -449,20 +402,15 @@ export default {
       this.longAbsData = initialDynamicDataSet()
       this.ratesData = initialRatesDataSet()
 
-      moex
-        // .loadMoexCsv(this.startDate.format('YYYYMMDD'))
-        .loadDataPeriod(
-          moment(this.datePickerFromValue),
-          moment(this.datePickerToValue),
-          this.eachChunkProcessCallback,
-          this.ratesProcessCallback,
-          () => {} // TODO: real error processing callback
-        )
-
-      // .then(openPositions => {
-      //   self.transformPositionsData(openPositions[self.feature.code])
-      //   // self.updateChartData('position')
-      // })
+      moex.loadDataPeriod(
+        moment(this.datePickerFromValue),
+        moment(this.datePickerToValue),
+        this.eachChunkProcessCallback,
+        this.ratesProcessCallback,
+        error => {
+          this.$emit('error', error)
+        }
+      )
     }
   }
 }

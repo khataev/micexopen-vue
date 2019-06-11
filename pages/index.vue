@@ -2,11 +2,7 @@
   <div>
     <!-- <b-row>
       <p>
-        Необходимость в данном ресурсе у автора перестала существовать. Если
-        среди посетителей есть те, кому он полезен или очень необходим - прошу
-        написать в личку. Для поддержания работоспособности ресурса необходимо
-        всего лишь 200р на хостинг в месяц. При отсутствии таковых сервис будет
-        погашен 01.04.2019
+        // TODO: Info messages for users
       </p>
     </b-row> -->
     <!-- Комбобокс с инструментами -->
@@ -54,7 +50,6 @@
 </template>
 
 <script>
-// TODO: Yandex metrica
 import StaticPositionsTab from '~/components/StaticPositions.vue'
 import DynamicPositionsTab from '~/components/DynamicPositions.vue'
 
@@ -63,7 +58,23 @@ import { Moex } from './../plugins/moex'
 
 const moex = new Moex()
 
+// TODO: Yandex metrica - check
+const scriptString =
+  '(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};' +
+  'm[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})' +
+  "(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');" +
+  "ym(40656204, 'init', {" +
+  'clickmap:true,' +
+  'trackLinks:true,' +
+  'accurateTrackBounce:true,' +
+  'webvisor:true' +
+  '});'
+
 export default {
+  head: {
+    script: [{ innerHTML: scriptString, type: 'text/javascript' }],
+    __dangerouslyDisableSanitizers: ['script']
+  },
   components: {
     StaticPositionsTab,
     DynamicPositionsTab
@@ -79,44 +90,45 @@ export default {
       openPositions: null
     }
   },
-  watch: {
-    selectedFeature: function(val) {
-      console.log('SELECTED', this.selectedFeature)
-    }
-  },
+  // TODO: why this crashes all??
+  // asyncData(context) {
+  //   return {
+  //     startDate: moex.getPreviousTradingDay()
+  //   }
+  // },
   mounted() {
-    // const date1 = moex.getPreviousTradingDay().toISOString()
-    self = this // TODO: try avoid context hoisting with arrow function
-    const onComplete = function(openPositions) {
-      self.openPositions = openPositions
+    moex
+      .loadMoexCsv(this.startDate.format('YYYYMMDD'))
+      .then(this.onMoexComplete)
+      .catch(this.onError)
+  },
+  methods: {
+    onMoexComplete(openPositions) {
+      this.openPositions = openPositions
 
       for (const key in openPositions) {
         if (typeof openPositions[key] === 'function') continue
 
         // console.log(app.openPositions[key].toJSON());
-        self.featuresListRaw.push({
+        this.featuresListRaw.push({
           code: key,
           // text: openPositions[key].toJSON().name
           label: openPositions[key].name
         })
       }
-      self.selectedFeature = self.featuresListRaw.filter(
+      this.selectedFeature = this.featuresListRaw.filter(
         feature => feature.code === 'Si_F'
       )[0]
-    }
-    moex.loadMoexCsv(this.startDate.format('YYYYMMDD')).then(onComplete)
-    // scripts.loadData(scripts.getPreviousTradingDay(), null)
-  },
-  methods: {
-    onError: function(value) {
-      this.errorText = value
+    },
+    // TODO: propagating errors from child components (Static/DynamicPositions)
+    onError(error) {
+      this.errorText = error && error.message
     }
   }
 }
 </script>
 
-<style>
-/* TODO: scoped */
+<style scoped>
 body {
   /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;

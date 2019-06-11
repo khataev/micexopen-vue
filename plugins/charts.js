@@ -1,9 +1,52 @@
 'use strict'
 
-import _ from 'underscore'
 import moment from 'moment'
 
 const charts = {
+  longChartOptions(title) {
+    return {
+      title: {
+        display: true,
+        text: title
+      },
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              unit: 'week'
+            }
+          }
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    }
+  },
+  ratesChartOptions() {
+    return {
+      title: {
+        display: true,
+        text: 'Курс доллара'
+      },
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              unit: 'week'
+            }
+          }
+        ]
+      }
+    }
+  },
+
   // Формирование данных для графика открытых позиций на дату
   getPieData: function(rawLong, rawShort) {
     const long = Math.abs(rawLong)
@@ -72,16 +115,6 @@ const charts = {
           data: ratesDataset.spotUsdRates || []
         }
       ]
-    }
-  },
-
-  // Настройки для графика открытых позиций на дату
-  pieOptions: function() {
-    return {
-      title: {
-        display: true,
-        text: ''
-      }
     }
   },
 

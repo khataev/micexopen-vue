@@ -1,50 +1,55 @@
-// import axios from '@nuxtjs/axios'
-// const axios = require('@nuxtjs/axios')
+import {
+  USD_RATES_URL,
+  USD_TOM_RATES_URL,
+  CALENDARIFIC_URL,
+  CALENDARIFIC_API_KEY
+} from './config.js'
 const axios = require('axios')
 
 class Api {
   constructor() {
-    // Путь к API для получения курса доллара
-    this.usdRatesUrl = 'http://vmnet.herokuapp.com/api/v1/rates/usd.json'
-    this.usdRatesAuxUrl = 'http://7thheaven.myds.me:3000/api/v1/rates/usd.json'
-    this.usdRatesTestUrl = 'http://192.168.1.100:3000/api/v1/rates/usd.json'
-    // Формирование полного URL для получения курса доллара за период времени
-    this.getUSDRatesUrl = function(startMoment, endMoment) {
-      return (
-        this.usdRatesUrl +
-        '?start_date=' +
-        startMoment.format('YYYYMMDD') +
-        '&end_date=' +
-        endMoment.format('YYYYMMDD')
-        // + '&callback=?'
-      )
-    }
-
+    // API for CBRF USD rates
     this.getUSDRatesJSON = function(startMoment, endMoment) {
-      return axios.get(this.getUSDRatesUrl(startMoment, endMoment))
+      return axios.get(USD_RATES_URL, {
+        params: {
+          start_date: startMoment.format('YYYYMMDD'),
+          end_date: endMoment.format('YYYYMMDD')
+        }
+      })
       // .then(onComplete)
       // .catch(onFail)
     }
-    // Путь к API для получения курса USDRUB_TOM С ММВБ
-    this.usdtomRatesUrl =
-      'http://vmnet.herokuapp.com/api/v1/spot_rates/usdrub_tom.json'
-    // this.usdtomRatesAuxUrl =
-    //   'http://7thheaven.myds.me:3000/api/v1/spot_rates/usdrub_tom.json'
-    // this.usdtomRatesTestUrl =
-    //   'http://192.168.1.100:3000/api/v1/spot_rates/usdrub_tom.json'
-    // Формирование полного URL для получения курса доллара за период времени
-    this.getSpotUSDRatesUrl = function(startMoment, endMoment) {
-      return (
-        this.usdtomRatesUrl +
-        '?start_date=' +
-        startMoment.format('YYYYMMDD') +
-        '&end_date=' +
-        endMoment.format('YYYYMMDD')
-        // + '&callback=?'
-      )
-    }
+
+    // API for MOEX USDRUB_TOM
     this.getSpotUSDRatesJSON = function(startMoment, endMoment) {
-      return axios.get(this.getSpotUSDRatesUrl(startMoment, endMoment))
+      return axios.get(USD_TOM_RATES_URL, {
+        params: {
+          start_date: startMoment.format('YYYYMMDD'),
+          end_date: endMoment.format('YYYYMMDD')
+        }
+      })
+      // .then(onComplete)
+      // .catch(onFail)
+      // $.getJSON(this.getSpotUSDRatesUrl(startMoment, endMoment), function(data) {
+      //   onComplete(data)
+      // }).fail(onFail)
+    }
+
+    // TODO: move to back api and cache it
+    this.getHolidays = async function(year) {
+      const desiredType = 'National holiday'
+      const response = await axios.get(CALENDARIFIC_URL, {
+        params: {
+          api_key: CALENDARIFIC_API_KEY,
+          country: 'RU',
+          year: year
+        }
+      })
+
+      return response.data.response.holidays
+        .filter(holiday => holiday.type.includes(desiredType))
+        .map(holiday => holiday.date.iso)
+
       // .then(onComplete)
       // .catch(onFail)
       // $.getJSON(this.getSpotUSDRatesUrl(startMoment, endMoment), function(data) {

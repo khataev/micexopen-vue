@@ -1,11 +1,10 @@
 'use strict'
 
+import { MOEX_CSV_BASE_URL, INITIAL_FEATURE_CODE } from './config'
 import api from './apicalls'
 
 const moment = require('moment')
 const Papa = require('papaparse')
-
-// const _ = require('underscore')
 
 const DirectionPositions = function({
   changePrevWeekAbs = 0,
@@ -71,7 +70,7 @@ export const OpenPositions = function() {
   }
   this.addPosition = function(position) {
     // debugger
-    const isinkey = position.isin + '_' + position.contract_type
+    const isinkey = `${position.isin}_${position.contract_type}`
     if (this[isinkey] == null) {
       this[isinkey] = new FeatureOpenPositions({
         isin: position.isin,
@@ -120,37 +119,22 @@ export const OpenPositions = function() {
 export const Moex = function() {
   // Функция загрузки csv с открытыми позициями по инструментам
   // date - дата в виде строки ГГГГММДД
-  // onComplete - коллбек по окончанию загрузки csv
-  // onRender - функция по обновлению интерфейса (если требуется)
+  // Возвращает Promise
   this.loadMoexCsv = function(date) {
-    // TODO: to config as in orders-monitor
-    const directUrl = `http://moex.com/ru/derivatives/open-positions-csv.aspx?d=${date}&t=1`
-    const proxyUrl = `http://vmnet.herokuapp.com/open_positions/${date}`
-    const proxyAuxUrl = `http://7thheaven.myds.me:3000/open_positions/${date}`
+    const moexUrl = `${MOEX_CSV_BASE_URL}/${date}`
 
-    // self = this
     return new Promise((resolve, reject) => {
-      Papa.parse(proxyUrl, {
+      Papa.parse(moexUrl, {
         delimiter: ',',
         download: true,
         header: true,
         dynamicTyping: true,
         complete: function(results) {
-          console.log('complete')
           // загружаем данные из файла в объект OpenPositions
           const openPositions = new OpenPositions()
           results.data.forEach(row => {
             openPositions.addPosition(row)
           })
-
-          // self.onCsvComplete(results)
-          // if (results.data[0].errorcode == 500)
-          //   reject(
-          //     new Error(
-          //       'Сервер ММВБ перегружен. Пожалуйста повторите свою попытку позднее'
-          //     )
-          //   )
-          // else
           resolve(openPositions)
         },
         error: function(error, file, inputElem, reason) {
@@ -166,28 +150,15 @@ export const Moex = function() {
   }
 
   this.openPositionsDynamics = null
-  // TODO: кажется, не используется нигде
-  // Массив обработанных дней в периоде - необходим для синхронизации асинхронных потоков загрузки csv с основным
-  this.workingPeriodSync = null
 
   // Функция аккумулирования загруженных на дату открытых позиций в хэш-массиве
   this.accumulateCsv = function(openPositions) {
-    const defElementCode = 'Si_F' // TODO: find more elegant way
-    // структурированные данные из объекта на дату добавляем в хэш-массив
-    // TODO: why moment could be nil?
     const moment =
-      openPositions[defElementCode] && openPositions[defElementCode].moment
+      openPositions[INITIAL_FEATURE_CODE] &&
+      openPositions[INITIAL_FEATURE_CODE].moment
     if (!moment || moment === '') return
-    // this.openPositionsDynamics[openPositions.data[0].moment] = openPositions
+
     this.openPositionsDynamics[moment] = openPositions
-
-    // TODO: render
-    // app.renderDynamicDataPortion(app.openPositions)
-
-    // отметим день, который обработали
-    this.workingPeriodSync.pop()
-    // if (app.workingPeriodSync.length == 0)
-    //     app.renderDynamics();
   }
 
   // Загрузка данных за период и отображение на странице
@@ -202,21 +173,15 @@ export const Moex = function() {
     const currentMoment = moment(momentFrom)
 
     this.openPositionsDynamics = {}
-    // Отрисовываем пустой график
-    // charts.ChartMan.drawOpenPositionsDynamicsChart()
-    // charts.ChartMan.drawOpenPositionsDynamicsChart2()
 
+    // TODO: get rid of this
     const self = this
-    // Заполнение массива для синхронизации потоков
-    this.workingPeriodSync = []
+
     const currentMomentDup = moment(momentFrom)
     while (
       currentMomentDup.isBefore(momentTo, 'day') ||
       currentMomentDup.isSame(momentTo, 'day')
     ) {
-      if (currentMomentDup.day() > 0 && currentMomentDup.day() < 7) {
-        this.workingPeriodSync.push(currentMomentDup.format('YYYYMMDD'))
-      }
       currentMomentDup.add(1, 'day')
     }
 
@@ -233,6 +198,7 @@ export const Moex = function() {
             return openPositions
           })
           .then(eachChunkProcessCallback)
+          .catch(errorCallback)
       }
       currentMoment.add(1, 'day')
     }
@@ -253,34 +219,32 @@ export const Moex = function() {
       .catch(errorCallback)
   }
 
-  this.getForHoliday = function(mnt) {
-    if (mnt.isSame('2016-11-06', 'day')) return moment('2016-11-03')
-    if (mnt.isSame('2016-11-07', 'day')) return moment('2016-11-03')
-    if (mnt.isSame('2017-01-03', 'day')) return moment('2016-12-30')
-    if (mnt.isSame('2017-02-24', 'day')) return moment('2017-02-22')
-    if (mnt.isSame('2017-03-09', 'day')) return moment('2017-03-07')
-    if (mnt.isSame('2017-05-02', 'day')) return moment('2017-04-28')
-    if (mnt.isSame('2017-05-09', 'day')) return moment('2017-05-05')
-    if (mnt.isSame('2017-05-10', 'day')) return moment('2017-05-05')
-    if (mnt.isSame('2017-06-13', 'day')) return moment('2017-06-09')
-    if (mnt.isSame('2017-11-07', 'day')) return moment('2017-11-03')
-    return undefined
+  this.getToday = function() {
+    return moment()
   }
-  this.getPreviousTradingDay = function() {
-    let day
-    switch (moment().day()) {
+
+  this.getPreviousTradingDay = function(date = moment(), _holidaysCache) {
+    let result
+    switch (date.day()) {
       case 0:
-        day = moment().subtract(2, 'days')
+        result = date.subtract(2, 'days')
         break
       case 1:
-        day = moment().subtract(3, 'days')
+        result = date.subtract(3, 'days')
         break
       default:
-        day = moment().subtract(1, 'days')
+        result = date.subtract(1, 'days')
         break
     }
-    const forHoliday = this.getForHoliday(moment())
-    return forHoliday === undefined ? day : forHoliday
+
+    // TODO: find out how to use async function in data()
+    // const holidays = holidaysCache || (await api.getHolidays(date.year()))
+
+    // return holidays.includes(date.format('YYYY-MM-DD'))
+    //   ? this.getPreviousTradingDay(result, holidays)
+    //   : result
+
+    return result
   }
 }
 // // module.exports = new Moex()

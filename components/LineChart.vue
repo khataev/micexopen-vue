@@ -11,8 +11,7 @@ export default {
       default: function() {
         return {}
       }
-    },
-    title: { type: String, default: '' }
+    }
   },
   watch: {
     chartdata() {
@@ -21,33 +20,6 @@ export default {
   },
   mounted() {
     this.renderChart(this.chartData, this.options)
-  },
-  methods: {
-    // opts() {
-    //   return {
-    //     title: {
-    //       display: true,
-    //       text: this.title
-    //     },
-    //     scales: {
-    //       xAxes: [
-    //         {
-    //           type: 'time',
-    //           time: {
-    //             unit: 'week'
-    //           }
-    //         }
-    //       ],
-    //       yAxes: [
-    //         {
-    //           ticks: {
-    //             beginAtZero: true
-    //           }
-    //         }
-    //       ]
-    //     }
-    //   }
-    // }
   }
 }
 </script>
