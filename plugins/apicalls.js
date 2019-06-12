@@ -1,16 +1,10 @@
-import {
-  USD_RATES_URL,
-  USD_TOM_RATES_URL,
-  CALENDARIFIC_URL,
-  CALENDARIFIC_API_KEY
-} from './config.js'
 const axios = require('axios')
 
 class Api {
   constructor() {
     // API for CBRF USD rates
     this.getUSDRatesJSON = function(startMoment, endMoment) {
-      return axios.get(USD_RATES_URL, {
+      return axios.get(process.env.USD_RATES_URL, {
         params: {
           start_date: startMoment.format('YYYYMMDD'),
           end_date: endMoment.format('YYYYMMDD')
@@ -22,7 +16,7 @@ class Api {
 
     // API for MOEX USDRUB_TOM
     this.getSpotUSDRatesJSON = function(startMoment, endMoment) {
-      return axios.get(USD_TOM_RATES_URL, {
+      return axios.get(process.env.USD_TOM_RATES_URL, {
         params: {
           start_date: startMoment.format('YYYYMMDD'),
           end_date: endMoment.format('YYYYMMDD')
@@ -38,9 +32,9 @@ class Api {
     // TODO: move to back api and cache it
     this.getHolidays = async function(year) {
       const desiredType = 'National holiday'
-      const response = await axios.get(CALENDARIFIC_URL, {
+      const response = await axios.get(process.env.CALENDARIFIC_URL, {
         params: {
-          api_key: CALENDARIFIC_API_KEY,
+          api_key: process.env.CALENDARIFIC_API_KEY,
           country: 'RU',
           year: year
         }

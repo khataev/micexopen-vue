@@ -22,6 +22,24 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
+  env: {
+    USD_RATES_URL:
+      process.env.USD_RATES_URL ||
+      'https://vmnet.herokuapp.com/api/v1/rates/usd.json',
+    USD_TOM_RATES_URL:
+      process.env.USD_TOM_RATES_URL ||
+      'https://vmnet.herokuapp.com/api/v1/spot_rates/usdrub_tom.json',
+    CALENDARIFIC_URL:
+      process.env.CALENDARIFIC_URL ||
+      'https://calendarific.com/api/v2/holidays',
+    CALENDARIFIC_API_KEY: process.env.CALENDARIFIC_API_KEY,
+    // `http://moex.com/ru/derivatives/open-positions-csv.aspx?d=${date}&t=1`
+    MOEX_CSV_BASE_URL:
+      process.env.MOEX_CSV_BASE_URL ||
+      'https://vmnet.herokuapp.com/open_positions',
+    INITIAL_FEATURE_CODE: process.env.INITIAL_FEATURE_CODE || 'Si_F'
+  },
+
   /*
    ** Customize the progress-bar color
    */

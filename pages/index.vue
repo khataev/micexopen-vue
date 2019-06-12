@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- <b-row>
+    <!--<b-row>
       <p>
         // TODO: Info messages for users
       </p>
-    </b-row> -->
+    </b-row>-->
     <!-- Комбобокс с инструментами -->
     <b-row>
       <b-col xs="12" sm="12" md="12">
@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import { INITIAL_FEATURE_CODE } from './../plugins/config'
-
 import StaticPositionsTab from '~/components/StaticPositions.vue'
 import DynamicPositionsTab from '~/components/DynamicPositions.vue'
 
@@ -119,7 +117,7 @@ export default {
         })
       }
       this.selectedFeature = this.featuresListRaw.filter(
-        feature => feature.code === INITIAL_FEATURE_CODE
+        feature => feature.code === process.env.INITIAL_FEATURE_CODE
       )[0]
     },
     // TODO: propagating errors from child components (Static/DynamicPositions)

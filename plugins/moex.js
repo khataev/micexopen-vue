@@ -1,6 +1,5 @@
 'use strict'
 
-import { MOEX_CSV_BASE_URL } from './config'
 import api from './apicalls'
 
 const moment = require('moment')
@@ -121,7 +120,8 @@ export const Moex = function() {
   // date - дата в виде строки ГГГГММДД
   // Возвращает Promise
   this.loadMoexCsv = function(date) {
-    const moexUrl = `${MOEX_CSV_BASE_URL}/${date}`
+    const moexUrl = `${process.env.MOEX_CSV_BASE_URL}/${date}`
+    console.log(moexUrl)
 
     return new Promise((resolve, reject) => {
       Papa.parse(moexUrl, {
