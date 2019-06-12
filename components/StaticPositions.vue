@@ -62,25 +62,24 @@
               <th scope="col">Короткие позиции</th>
             </tr>
           </template>
-
-          <!--
-            // const fmt = '0,0'
-      const fmt = code === 'changePrevWeekPerc' ? '0.00' : '0,0'
-      const multi = code === 'changePrevWeekPerc' ? 100 : 1
-      numeral(fizLong)
-          .multiply(multi)
-          .format(fmt),
-           -->
-          <!-- <template slot="fizLong" slot-scope="{ data }"
-            >{{ data }}
-          </template> -->
+          <template slot="fizLong" slot-scope="data"
+            >{{ formatNumber(data.item.code, data.value) }}
+          </template>
+          <template slot="jurLong" slot-scope="data"
+            >{{ formatNumber(data.item.code, data.value) }}
+          </template>
+          <template slot="fizShort" slot-scope="data"
+            >{{ formatNumber(data.item.code, data.value) }}
+          </template>
+          <template slot="jurShort" slot-scope="data"
+            >{{ formatNumber(data.item.code, data.value) }}
+          </template>
         </b-table>
       </b-col>
     </b-row>
     <!-- Область с диаграммами -->
     <b-row class="chart-row">
       <b-col xs="6" sm="6" md="6" class="chart-area">
-        <!-- <canvas id="fizPositionChart"></canvas> -->
         <pie-chart
           v-if="showChart"
           :title="fizChartTitle"
@@ -88,7 +87,6 @@
         ></pie-chart>
       </b-col>
       <b-col xs="6" sm="6" md="6" class="chart-area">
-        <!-- <canvas id="jurPositionChart"></canvas> -->
         <pie-chart
           v-if="showChart"
           :title="jurChartTitle"
@@ -104,7 +102,7 @@ import DatePicker from 'vuejs-datepicker'
 import { ru } from 'vuejs-datepicker/dist/locale'
 
 import PieChart from './PieChart'
-import charts from './../plugins/charts' // TODO: do we need it?
+import charts from './../plugins/charts'
 import { Moex } from './../plugins/moex'
 
 // import { DateTime } from 'luxon'
@@ -243,7 +241,6 @@ export default {
       JurChartData: {},
       showChart: false,
       tableBusy: false
-      // innerOpenPositions: this.openPositions
     }
   },
   computed: {
@@ -252,9 +249,7 @@ export default {
     }
   },
   mounted() {
-    // console.log('AXIOS', this.$axios)
     this.setNumeralSettings()
-    // TODO: why moment.toDate() is not a date
     // console.log(typeof date)
     // console.log(typeof date2)
     // console.log(typeof date3)
@@ -268,6 +263,8 @@ export default {
   methods: {
     updateChartData: function(code) {
       const position = this.tableItems.filter(item => item.code === code)[0]
+      if (position.fizLong === '-') return
+
       this.fizChartData = charts.getPieData(position.fizLong, position.fizShort)
       this.jurChartData = charts.getPieData(position.jurLong, position.jurShort)
       this.showChart = true
@@ -353,6 +350,16 @@ export default {
         numeral.register('locale', 'ru', locale)
         numeral.locale('ru')
       }
+    },
+    formatNumber: function(code, number) {
+      // // const fmt = '0,0'
+      if (number === '-') return number
+
+      const fmt = code === 'changePrevWeekPerc' ? '0.00' : '0,0'
+      const multi = code === 'changePrevWeekPerc' ? 100 : 1
+      return numeral(number)
+        .multiply(multi)
+        .format(fmt)
     }
     // validateDateInput: function(val) {
     //   return (

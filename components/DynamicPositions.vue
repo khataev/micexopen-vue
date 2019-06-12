@@ -189,15 +189,6 @@ export default {
       chartHeight: 165
     }
   },
-  computed: {
-    // TODO: do we need computed props?
-    datePickerFromValue() {
-      return this.datePicker.fromValue
-    },
-    datePickerToValue() {
-      return this.datePicker.toValue
-    }
-  },
   methods: {
     makeRow: moex.makeTransformedRow,
     transformPositionsData: function(positionsModel) {
@@ -334,7 +325,6 @@ export default {
       })
 
       // Которые затем пересортировываем
-      // TODO: move to common function
       // ОТНОСИТЕЛЬНЫЕ КОНТРАКТЫ
       this.longPercData.fizData = _.sortBy(this.longPercData.fizData, 'x')
       this.longPercData.jurData = _.sortBy(this.longPercData.jurData, 'x')
@@ -349,32 +339,14 @@ export default {
       this.longPercChartData = charts.getDynamicData(this.longPercData)
       this.longAbsChartData = charts.getDynamicData(this.longAbsData)
     },
-    // TODO: do we need chart options update logic?
-    updateRatesChartWithDataset: function(data, type) {
-      // Обновляем график
-      if (this.currencyRatesChart) {
-        periodBoundaries = charts.getMinMaxDates(data)
-
-        this.ratesDatasets[type].data = charts.prepareRatesData(data)
-
-        if (this.currencyRatesChart) {
-          this.currencyRatesChart.options.scales.xAxes[0].time.min =
-            periodBoundaries.min
-          this.currencyRatesChart.options.scales.xAxes[0].time.max =
-            periodBoundaries.max
-
-          this.currencyRatesChart.update()
-        }
-      }
-    },
     showPositionsDynamic: function() {
       this.longPercData = initialDynamicDataSet()
       this.longAbsData = initialDynamicDataSet()
       this.ratesData = initialRatesDataSet()
 
       moex.loadDataPeriod(
-        moment(this.datePickerFromValue),
-        moment(this.datePickerToValue),
+        moment(this.datePicker.fromValue),
+        moment(this.datePicker.toValue),
         this.eachChunkProcessCallback,
         this.ratesProcessCallback,
         error => {
