@@ -1,9 +1,7 @@
 <template>
   <div>
     <b-row class="table-row">
-      <b-col xs="6" sm="6" md="6" class="text-right text-header">
-        Интервал c:
-      </b-col>
+      <b-col xs="6" sm="6" md="6" class="text-right text-header">Интервал c:</b-col>
       <b-col xs="2" sm="2" md="2">
         <DatePicker
           id="datepickerFrom"
@@ -15,9 +13,7 @@
           :format="datePicker.format"
         />
       </b-col>
-      <b-col xs="1" sm="1" md="1" class="text-center text-header">
-        по:
-      </b-col>
+      <b-col xs="1" sm="1" md="1" class="text-center text-header">по:</b-col>
       <b-col xs="2" sm="2" md="2">
         <DatePicker
           id="datepickerTo"
@@ -36,9 +32,8 @@
           type="submit"
           onclick="yaCounter40656204.reachGoal('show-dynamics-btn'); return true;"
           @click="showPositionsDynamic"
-        >
-          Показать
-        </button>
+          :disabled="!showButtonEnabled"
+        >Показать</button>
       </b-col>
     </b-row>
     <!-- Область с диаграммами -->
