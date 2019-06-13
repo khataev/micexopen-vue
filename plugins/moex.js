@@ -120,8 +120,7 @@ export const Moex = function() {
   // date - дата в виде строки ГГГГММДД
   // Возвращает Promise
   this.loadMoexCsv = function(date) {
-    const moexUrl = `${process.env.MOEX_CSV_BASE_URL}/${date}`
-    console.log(moexUrl)
+    const moexUrl = `/api/open_positions/${date}`
 
     return new Promise((resolve, reject) => {
       Papa.parse(moexUrl, {
