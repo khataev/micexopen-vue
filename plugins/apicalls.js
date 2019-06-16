@@ -13,6 +13,7 @@ class Api {
     }
 
     // API for MOEX USDRUB_TOM
+    // TODO: async/await??
     this.getSpotUSDRatesJSON = function(startMoment, endMoment) {
       return axios.get('/api/rates/usd_tom', {
         params: {
@@ -22,21 +23,25 @@ class Api {
       })
     }
 
-    // TODO: move to back api and cache it
-    this.getHolidays = async function(year) {
-      const desiredType = 'National holiday'
-      const response = await axios.get(process.env.CALENDARIFIC_URL, {
-        params: {
-          api_key: process.env.CALENDARIFIC_API_KEY,
-          country: 'RU',
-          year: year
-        }
-      })
-
-      return response.data.response.holidays
-        .filter(holiday => holiday.type.includes(desiredType))
-        .map(holiday => holiday.date.iso)
-    }
+    // TODO: cache it
+    // this.getHolidays = async function(year) {
+    //   const desiredType = 'National holiday'
+    //   try {
+    //     console.log('getHolidays base url: ', config.env.BASE_URL)
+    //     const response = await axios.get('/api/holidays', {
+    //       baseUrl: config.env.BASE_URL,
+    //       params: {
+    //         year: year
+    //       }
+    //     })
+    //     return response.data.response.holidays
+    //       .filter(holiday => holiday.type.includes(desiredType))
+    //       .map(holiday => holiday.date.iso)
+    //   } catch (error) {
+    //     console.log('getHolidays error:', error.message)
+    //     return []
+    //   }
+    // }
   }
 }
 

@@ -23,6 +23,7 @@ module.exports = {
   },
 
   env: {
+    // BASE_URL: process.env.BASE_URL || 'https://micexopen.herokuapp.com/',
     USD_RATES_URL:
       process.env.USD_RATES_URL ||
       'https://vmnet.herokuapp.com/api/v1/rates/usd.json',
@@ -73,6 +74,8 @@ module.exports = {
    */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    // baseURL: process.env.BASE_URL || 'https://micexopen.herokuapp.com/'
+    // debug: true
   },
 
   /*

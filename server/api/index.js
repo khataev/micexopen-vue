@@ -2,6 +2,8 @@ import express from 'express'
 import axios from 'axios'
 const qs = require('qs')
 
+const config = require('../../nuxt.config.js')
+
 // Create express router
 const router = express.Router()
 
@@ -18,27 +20,41 @@ router.use((req, res, next) => {
 
 router.get('/rates/usd', (req, res) => {
   axios
-    .get(process.env.USD_RATES_URL, { params: qs.parse(req.query) })
+    .get(config.env.USD_RATES_URL, { params: qs.parse(req.query) })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
 
 router.get('/rates/usd_tom', (req, res) => {
   axios
-    .get(process.env.USD_TOM_RATES_URL, { params: qs.parse(req.query) })
+    .get(config.env.USD_TOM_RATES_URL, { params: qs.parse(req.query) })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
 
 router.get('/open_positions/:date', (req, res) => {
-  const moexUrl = `${process.env.MOEX_CSV_BASE_URL}/${req.params.date}`
+  const moexUrl = `${config.env.MOEX_CSV_BASE_URL}/${req.params.date}`
   axios
     .get(moexUrl)
     .then(result => res.send(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
 
-// TODO: need proxy for calendarific api
+router.get('/holidays', (req, res) => {
+  const baseParams = {
+    api_key: config.env.CALENDARIFIC_API_KEY,
+    country: 'RU'
+  }
+  const params = qs.parse(req.query)
+  const resultParams = Object.assign(baseParams, params)
+  axios
+    .get(config.env.CALENDARIFIC_URL, { params: resultParams })
+    .then(result => res.json(result.data))
+    .catch(error => {
+      console.log('HOLIDAYS error:', error.message)
+      res.status(422).json({ error: error.message })
+    })
+})
 
 // Export the server middleware
 export default {

@@ -2,9 +2,7 @@
   <div>
     <!-- Таблица с информацией об открытых позициях -->
     <b-row class="table-row">
-      <b-col xs="7" sm="9" md="9" class="text-right text-header">
-        Дата:
-      </b-col>
+      <b-col xs="7" sm="9" md="9" class="text-right text-header">Дата:</b-col>
       <b-col xs="3" sm="2" md="2">
         <!-- <input id="datepicker" type="text" class="form-control" /> -->
         <DatePicker
@@ -23,9 +21,7 @@
           type="submit"
           :disabled="!showButtonEnabled"
           @click="showOpenPositions"
-        >
-          Показать
-        </b-btn>
+        >Показать</b-btn>
       </b-col>
     </b-row>
     <b-row>
@@ -41,7 +37,7 @@
           @row-clicked="onRowClicked"
         >
           <template name="table-colgroup ">
-            <col />
+            <col>
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <colgroup></colgroup>
@@ -51,9 +47,7 @@
               <td rowspan="2"></td>
               <th colspan="2" scope="colgroup">Физические лица</th>
               <th colspan="2" scope="colgroup">Юридические лица</th>
-              <th rowspan="2" scope="colgroup">
-                Совокупный объем открытых позиций
-              </th>
+              <th rowspan="2" scope="colgroup">Совокупный объем открытых позиций</th>
             </tr>
             <tr>
               <th scope="col">Длинные позиции</th>
@@ -62,36 +56,20 @@
               <th scope="col">Короткие позиции</th>
             </tr>
           </template>
-          <template slot="fizLong" slot-scope="data"
-            >{{ formatNumber(data.item.code, data.value) }}
-          </template>
-          <template slot="jurLong" slot-scope="data"
-            >{{ formatNumber(data.item.code, data.value) }}
-          </template>
-          <template slot="fizShort" slot-scope="data"
-            >{{ formatNumber(data.item.code, data.value) }}
-          </template>
-          <template slot="jurShort" slot-scope="data"
-            >{{ formatNumber(data.item.code, data.value) }}
-          </template>
+          <template slot="fizLong" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
+          <template slot="jurLong" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
+          <template slot="fizShort" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
+          <template slot="jurShort" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
         </b-table>
       </b-col>
     </b-row>
     <!-- Область с диаграммами -->
     <b-row class="chart-row">
       <b-col xs="6" sm="6" md="6" class="chart-area">
-        <pie-chart
-          v-if="showChart"
-          :title="fizChartTitle"
-          :chart-data="fizChartData"
-        ></pie-chart>
+        <pie-chart v-if="showChart" :title="fizChartTitle" :chart-data="fizChartData"></pie-chart>
       </b-col>
       <b-col xs="6" sm="6" md="6" class="chart-area">
-        <pie-chart
-          v-if="showChart"
-          :title="jurChartTitle"
-          :chart-data="jurChartData"
-        ></pie-chart>
+        <pie-chart v-if="showChart" :title="jurChartTitle" :chart-data="jurChartData"></pie-chart>
       </b-col>
     </b-row>
   </div>
@@ -104,8 +82,6 @@ import { ru } from 'vuejs-datepicker/dist/locale'
 import PieChart from './PieChart'
 import charts from './../plugins/charts'
 import { Moex } from './../plugins/moex'
-
-// import { DateTime } from 'luxon'
 
 const numeral = require('numeral')
 const moment = require('moment')

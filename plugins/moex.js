@@ -116,6 +116,8 @@ export const OpenPositions = function() {
 }
 
 export const Moex = function() {
+  this.defaultDateFormat = 'YYYYMMDD'
+
   // Функция загрузки csv с открытыми позициями по инструментам
   // date - дата в виде строки ГГГГММДД
   // Возвращает Promise
@@ -178,7 +180,7 @@ export const Moex = function() {
       currentMoment.isSame(momentTo, 'day')
     ) {
       if (currentMoment.day() > 0 && currentMoment.day() < 6) {
-        this.loadMoexCsv(currentMoment.format('YYYYMMDD'))
+        this.loadMoexCsv(currentMoment.format(this.defaultDateFormat))
           .then(eachChunkProcessCallback)
           .catch(errorCallback)
       }
@@ -201,7 +203,7 @@ export const Moex = function() {
       .catch(errorCallback)
   }
 
-  this.getPreviousTradingDay = function(date = moment(), _holidaysCache) {
+  this.getPreviousTradingDay = function(date = moment(), holidaysCache) {
     let result
     switch (date.day()) {
       case 0:
@@ -216,13 +218,19 @@ export const Moex = function() {
     }
 
     // TODO: find out how to use async function in data()
-    // const holidays = holidaysCache || (await api.getHolidays(date.year()))
+    // const h = await api.getHolidays(date.year())
+    const holidays = holidaysCache // || (await api.getHolidays(date.year()))
 
-    // return holidays.includes(date.format('YYYY-MM-DD'))
-    //   ? this.getPreviousTradingDay(result, holidays)
-    //   : result
+    return holidays.includes(date.format('YYYY-MM-DD'))
+      ? this.getPreviousTradingDay(result, holidays)
+      : result
 
-    return result
+    // return result
+  }
+
+  this.getPreviousTradingDayString = function(date = moment(), holidaysCache) {
+    const day = this.getPreviousTradingDay(date, holidaysCache)
+    return day.format(this.defaultDateFormat)
   }
 
   this.makeTransformedRow = function(
