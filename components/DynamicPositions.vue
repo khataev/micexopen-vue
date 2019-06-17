@@ -184,6 +184,14 @@ export default {
       chartHeight: 165
     }
   },
+  computed: {
+    startMoment: function() {
+      return moment(this.datePicker.fromValue)
+    },
+    endMoment: function() {
+      return moment(this.datePicker.toValue)
+    }
+  },
   methods: {
     makeRow: moex.makeTransformedRow,
     transformPositionsData: function(positionsModel) {
@@ -334,20 +342,39 @@ export default {
       this.longPercChartData = charts.getDynamicData(this.longPercData)
       this.longAbsChartData = charts.getDynamicData(this.longAbsData)
     },
-    showPositionsDynamic: function() {
+    showPositionsDynamic: async function() {
       this.longPercData = initialDynamicDataSet()
       this.longAbsData = initialDynamicDataSet()
       this.ratesData = initialRatesDataSet()
 
       moex.loadDataPeriod(
-        moment(this.datePicker.fromValue),
-        moment(this.datePicker.toValue),
+        this.startMoment,
+        this.endMoment,
         this.eachChunkProcessCallback,
-        this.ratesProcessCallback,
         error => {
           this.$emit('error', error)
         }
       )
+
+      try {
+        const usdRates = await this.$axios.$get('/api/rates/usd', {
+          params: {
+            start_date: this.startMoment.format('YYYYMMDD'),
+            end_date: this.endMoment.format('YYYYMMDD')
+          }
+        })
+
+        const spotUsdRates = await this.$axios.$get('/api/rates/usd_tom', {
+          params: {
+            start_date: this.startMoment.format('YYYYMMDD'),
+            end_date: this.endMoment.format('YYYYMMDD')
+          }
+        })
+
+        this.ratesProcessCallback(usdRates, spotUsdRates)
+      } catch (error) {
+        this.$emit('error', error)
+      }
     }
   }
 }

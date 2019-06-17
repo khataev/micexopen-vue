@@ -96,7 +96,7 @@ export default {
   },
   // TODO: how could I get it work without store?
   async asyncData(context) {
-    // console.log(context)
+    // console.log('context.app.$getMoex()', context.app.$getMoex())
     const desiredType = 'National holiday'
     const today = moment()
     // try {
@@ -126,8 +126,7 @@ export default {
     // context.store.commit('setAxios', context.$axios)
     // context.store.commit('setYear', today.year())
 
-    if (!context.store.state.holidaysLoaded)
-      await context.store.dispatch('setHolidays', today.year())
+    await context.store.dispatch('loadHolidays', today.year())
     // console.log('asyncData holidays:', context.store.state.holidays)
 
     return {
@@ -161,6 +160,7 @@ export default {
     }
   },
   mounted() {
+    // console.log('mounted moex', this.$getMoex())
     // console.log('previousTradingDayString', this.previousTradingDayString)
     // console.log('previousTradingDay', moment(this.previousTradingDayString))
     moex

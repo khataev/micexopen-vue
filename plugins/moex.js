@@ -1,7 +1,5 @@
 'use strict'
 
-import api from './apicalls'
-
 const moment = require('moment')
 const Papa = require('papaparse')
 
@@ -154,25 +152,10 @@ export const Moex = function() {
   this.loadDataPeriod = function(
     momentFrom,
     momentTo,
-    // TODO: how to get rid of this params?
     eachChunkProcessCallback,
-    ratesProcessCallback,
     errorCallback
   ) {
     const currentMoment = moment(momentFrom)
-
-    this.openPositionsDynamics = {}
-
-    // TODO: get rid of this
-    const self = this
-
-    const currentMomentDup = moment(momentFrom)
-    while (
-      currentMomentDup.isBefore(momentTo, 'day') ||
-      currentMomentDup.isSame(momentTo, 'day')
-    ) {
-      currentMomentDup.add(1, 'day')
-    }
 
     // загрузка данных с ММВБ по открытым позициям за период
     while (
@@ -186,24 +169,9 @@ export const Moex = function() {
       }
       currentMoment.add(1, 'day')
     }
-
-    // загрузка курсов USD за период
-    // TODO: разнести загрузку и отображение
-    // this.loadUsdRates(momentFrom, momentTo)
-    api
-      .getUSDRatesJSON(momentFrom, momentTo)
-      .then(usdRates => {
-        api
-          .getSpotUSDRatesJSON(momentFrom, momentTo)
-          .then(spotUsdRates => {
-            ratesProcessCallback(usdRates.data, spotUsdRates.data)
-          })
-          .catch(errorCallback)
-      })
-      .catch(errorCallback)
   }
 
-  this.getPreviousTradingDay = function(date = moment(), holidaysCache) {
+  this.getPreviousTradingDay = function(date = moment(), holidays) {
     let result
     switch (date.day()) {
       case 0:
@@ -217,19 +185,13 @@ export const Moex = function() {
         break
     }
 
-    // TODO: find out how to use async function in data()
-    // const h = await api.getHolidays(date.year())
-    const holidays = holidaysCache // || (await api.getHolidays(date.year()))
-
     return holidays.includes(date.format('YYYY-MM-DD'))
       ? this.getPreviousTradingDay(result, holidays)
       : result
-
-    // return result
   }
 
-  this.getPreviousTradingDayString = function(date = moment(), holidaysCache) {
-    const day = this.getPreviousTradingDay(date, holidaysCache)
+  this.getPreviousTradingDayString = function(date = moment(), holidays) {
+    const day = this.getPreviousTradingDay(date, holidays)
     return day.format(this.defaultDateFormat)
   }
 
@@ -256,3 +218,9 @@ export const Moex = function() {
 // const moex = new Moex()
 // export OpenPositions
 // export moex
+
+export default ({ app }, inject) => {
+  inject('getMoex', () => {
+    return Moex
+  })
+}

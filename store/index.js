@@ -8,14 +8,8 @@ export const mutations = {
   }
 }
 
-export const getters = {
-  holidaysLoaded(state) {
-    return state.holidays.length > 0
-  }
-}
-
 export const actions = {
-  async setHolidays(context, year) {
+  async loadHolidays(context, year) {
     const desiredType = 'National holiday'
     try {
       const response = await this.$axios.$get('/api/holidays', {
