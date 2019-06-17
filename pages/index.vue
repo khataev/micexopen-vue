@@ -85,74 +85,27 @@ export default {
     return {
       selectPlaceholder: ' Загрузка...',
       errorText: null,
-      // previousTradingDayString: null,
-      // previousTradingDayString: '20190611',
-      // startDate: moex.getPreviousTradingDay(),
       // Feature items dropdown
       featuresListRaw: [],
       selectedFeature: null,
       openPositions: null
     }
   },
-  // TODO: how could I get it work without store?
   async asyncData(context) {
-    // console.log('context.app.$getMoex()', context.app.$getMoex())
-    const desiredType = 'National holiday'
+    // TODO: move Today to store
     const today = moment()
-    // try {
-    //   console.log('asyncData getHolidays base url: ', context.env.BASE_URL)
-    //   const response = await context.$axios.get('/api/holidays', {
-    //     // baseUrl: context.env.BASE_URL,
-    //     params: {
-    //       year: today.year()
-    //     }
-    //   })
-
-    //   const holidays = response.data.response.holidays
-    //     .filter(holiday => holiday.type.includes(desiredType))
-    //     .map(holiday => holiday.date.iso)
-
-    //   return {
-    //     previousTradingDayString: await moex.getPreviousTradingDayString(
-    //       today,
-    //       holidays
-    //     )
-    //   }
-    // } catch (error) {
-    //   console.log('asyncData getHolidays error:', error.message)
-    //   return []
-    // }
-
-    // context.store.commit('setAxios', context.$axios)
-    // context.store.commit('setYear', today.year())
-
-    await context.store.dispatch('loadHolidays', today.year())
-    // console.log('asyncData holidays:', context.store.state.holidays)
+    const holidays = await context.$axios.$get('/api/holidays', {
+      params: {
+        year: today.year()
+      }
+    })
 
     return {
       previousTradingDayString: moex.getPreviousTradingDayString(
         today,
-        context.store.state.holidays
+        holidays
       )
     }
-
-    // return {
-    //   previousTradingDayString: await moex.getPreviousTradingDayString()
-    //   // previousTradingDayString: '20190613',
-    //   // bla: await axios.get('http:/localhost/api/holidays', {
-    //   //   params: { year: '2019' }
-    //   // })
-    // }
-    // let response
-    // try {
-    //   response = await axios.get('http://localhost:3000/api/holidays', {
-    //     params: { year: '2019' }
-    //   })
-    // } catch (error) {
-    //   response = error.message
-    // }
-    // console.log(response)
-    // return { bla: response }
   },
   computed: {
     startDate() {
@@ -160,9 +113,6 @@ export default {
     }
   },
   mounted() {
-    // console.log('mounted moex', this.$getMoex())
-    // console.log('previousTradingDayString', this.previousTradingDayString)
-    // console.log('previousTradingDay', moment(this.previousTradingDayString))
     moex
       .loadMoexCsv(this.startDate.format(moex.defaultDateFormat))
       .then(this.onMoexComplete)
@@ -175,10 +125,8 @@ export default {
       for (const key in openPositions) {
         if (typeof openPositions[key] === 'function') continue
 
-        // console.log(app.openPositions[key].toJSON());
         this.featuresListRaw.push({
           code: key,
-          // text: openPositions[key].toJSON().name
           label: openPositions[key].name
         })
       }
@@ -189,24 +137,6 @@ export default {
     onError(error) {
       this.errorText = error && error.message
     }
-    // async getHolidays(year) {
-    //   const desiredType = 'National holiday'
-    //   try {
-    //     console.log('getHolidays base url: ', config.env.BASE_URL)
-    //     const response = await axios.get('/api/holidays', {
-    //       baseUrl: config.env.BASE_URL,
-    //       params: {
-    //         year: year
-    //       }
-    //     })
-    //     return response.data.response.holidays
-    //       .filter(holiday => holiday.type.includes(desiredType))
-    //       .map(holiday => holiday.date.iso)
-    //   } catch (error) {
-    //     console.log('getHolidays error:', error.message)
-    //     return []
-    //   }
-    // }
   }
 }
 </script>

@@ -47,9 +47,19 @@ router.get('/holidays', (req, res) => {
   }
   const params = qs.parse(req.query)
   const resultParams = Object.assign(baseParams, params)
+  const mapReduceHolidaysResponse = function(holidaysResponse) {
+    const desiredType = 'National holiday'
+    return holidaysResponse.response.holidays
+      .filter(holiday => holiday.type.includes(desiredType))
+      .map(holiday => holiday.date.iso)
+  }
+
   axios
     .get(config.env.CALENDARIFIC_URL, { params: resultParams })
-    .then(result => res.json(result.data))
+    .then(result => {
+      return mapReduceHolidaysResponse(result.data)
+    })
+    .then(result => res.json(result))
     .catch(error => {
       console.log('HOLIDAYS error:', error.message)
       res.status(422).json({ error: error.message })
