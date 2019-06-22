@@ -1,10 +1,15 @@
 <template>
   <div>
-    <!--<b-row>
-      <p>
-        // TODO: Info messages for users
-      </p>
-    </b-row>-->
+    <b-row class="top-row" v-if="showUserMessage">
+      <b-col>
+        <p class="text-center">
+          <b-alert variant="success" show>
+            🎉🎉🎉 Произошло долгожданное обновление сайта (немного подробностей
+            <b-link v-b-modal.instructionsModal>тут</b-link>)&nbsp;🎉🎉🎉
+          </b-alert>
+        </p>
+      </b-col>
+    </b-row>
     <!-- Комбобокс с инструментами -->
     <b-row>
       <v-select
@@ -92,7 +97,8 @@ export default {
       // Feature items dropdown
       featuresListRaw: [],
       selectedFeature: null,
-      openPositions: null
+      openPositions: null,
+      showUserMessage: moment().isSameOrBefore('2019-06-30')
     }
   },
   async asyncData(context) {
@@ -158,6 +164,10 @@ export default {
 </script>
 
 <style scoped>
+.top-row {
+  margin-top: 10px;
+  margin-bottom: -20px;
+}
 .tabs-area {
   margin-top: 20px;
 }
