@@ -1,8 +1,10 @@
 <template>
   <div>
     <!-- Таблица с информацией об открытых позициях -->
-    <b-row class="table-row">
-      <b-col cols="7" sm="9" md="9" class="text-right text-header">Дата:</b-col>
+    <b-row no-gutters>
+      <b-col cols="7" sm="9" md="9" class="text-right">
+        <p class="text-header">Дата:</p>
+      </b-col>
       <b-col cols="3" sm="2" md="2">
         <!-- TODO: Future dates prohibited -->
         <DatePicker
@@ -239,6 +241,9 @@ export default {
     // console.log(this.validateDateInput(date3))
   },
   methods: {
+    clearError: function() {
+      this.$emit('clearError')
+    },
     updateChartData: function(code) {
       const position = this.tableItems.filter(item => item.code === code)[0]
       if (position.fizLong === '-') return
@@ -305,6 +310,7 @@ export default {
       this.tableItems = []
     },
     showOpenPositions: function() {
+      this.clearError()
       this.tableBusy = true
       const self = this
       moex
@@ -330,7 +336,6 @@ export default {
       }
     },
     formatNumber: function(code, number) {
-      // // const fmt = '0,0'
       if (number === '-') return number
 
       const fmt = code === 'changePrevWeekPerc' ? '0.00' : '0,0'
@@ -339,14 +344,6 @@ export default {
         .multiply(multi)
         .format(fmt)
     }
-    // validateDateInput: function(val) {
-    //   return (
-    //     val === null ||
-    //     val instanceof Date ||
-    //     typeof val === 'string' ||
-    //     typeof val === 'number'
-    //   )
-    // }
   }
 }
 
@@ -359,5 +356,13 @@ thead > tr:nth-child(3) {
 }
 .table td.rightCell {
   text-align: right;
+}
+
+.tab-content {
+  padding-top: 20px;
+}
+
+.table-row {
+  margin-top: 20px;
 }
 </style>

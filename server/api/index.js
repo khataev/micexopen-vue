@@ -7,6 +7,7 @@ const config = require('../../nuxt.config.js')
 
 // Create express router
 const router = express.Router()
+const MAX_API_TIMEOUT = 3000
 
 // Transform req & res to have the same API as express
 // So we can use res.status() & res.json()
@@ -25,8 +26,7 @@ router.get('/rates/usd', (req, res) => {
   consola.info('/api/rates/usd')
   axios
     .get(config.env.USD_RATES_URL, {
-      params: qs.parse(req.query),
-      timeout: 1000
+      params: qs.parse(req.query)
     })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
@@ -36,8 +36,7 @@ router.get('/rates/usd_tom', (req, res) => {
   consola.info('/api/rates/usd_tom')
   axios
     .get(config.env.USD_TOM_RATES_URL, {
-      params: qs.parse(req.query),
-      timeout: 1000
+      params: qs.parse(req.query)
     })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
@@ -46,7 +45,7 @@ router.get('/rates/usd_tom', (req, res) => {
 router.get('/open_positions/:date', (req, res) => {
   const moexUrl = `${config.env.MOEX_CSV_BASE_URL}/${req.params.date}`
   axios
-    .get(moexUrl, { timeout: 1000 })
+    .get(moexUrl)
     .then(result => res.send(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
@@ -67,7 +66,10 @@ router.get('/holidays', (req, res) => {
   }
 
   axios
-    .get(config.env.CALENDARIFIC_URL, { params: resultParams, timeout: 1000 })
+    .get(config.env.CALENDARIFIC_URL, {
+      params: resultParams,
+      timeout: MAX_API_TIMEOUT
+    })
     .then(result => {
       const processedResult = mapReduceHolidaysResponse(result.data)
       consola.info('holidays', processedResult)

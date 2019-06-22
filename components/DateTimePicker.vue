@@ -1,5 +1,5 @@
 <template>
-  <vue-date-picker v-model="date" :config="options" />
+  <vue-date-picker v-model="date" :config="options"/>
 </template>
 
 <script>

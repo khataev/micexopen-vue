@@ -1,7 +1,9 @@
 <template>
   <div>
-    <b-row class="table-row">
-      <b-col cols="6" sm="6" md="6" class="text-right text-header">Интервал c:</b-col>
+    <b-row class="table-row" no-gutters>
+      <b-col cols="6" sm="6" md="6" class="text-right">
+        <p class="text-header">Интервал c:</p>
+      </b-col>
       <b-col cols="2" sm="2" md="2">
         <DatePicker
           id="datepickerFrom"
@@ -13,7 +15,9 @@
           :format="datePicker.format"
         />
       </b-col>
-      <b-col cols="1" sm="1" md="1" class="text-center text-header">по:</b-col>
+      <b-col cols="1" sm="1" md="1" class="text-center">
+        <p class="text-header">по:</p>
+      </b-col>
       <b-col cols="2" sm="2" md="2">
         <DatePicker
           id="datepickerTo"
@@ -26,15 +30,15 @@
         />
       </b-col>
       <b-col cols="1" sm="1" md="1">
-        <button
+        <b-btn
           id="show-dynamics-btn"
-          class="btn btn-info"
+          variant="info"
           type="submit"
           size="sm"
           onclick="yaCounter40656204.reachGoal('show-dynamics-btn'); return true;"
           @click="showPositionsDynamic"
           :disabled="!showButtonEnabled"
-        >Показать</button>
+        >Показать</b-btn>
       </b-col>
     </b-row>
     <!-- Область с диаграммами -->
@@ -194,6 +198,9 @@ export default {
     }
   },
   methods: {
+    clearError: function() {
+      this.$emit('clearError')
+    },
     makeRow: moex.makeTransformedRow,
     transformPositionsData: function(positionsModel) {
       if (!positionsModel) return
@@ -344,6 +351,7 @@ export default {
       this.longAbsChartData = charts.getDynamicData(this.longAbsData)
     },
     showPositionsDynamic: async function() {
+      this.clearError()
       this.longPercData = initialDynamicDataSet()
       this.longAbsData = initialDynamicDataSet()
       this.ratesData = initialRatesDataSet()
@@ -380,3 +388,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.tab-content {
+  padding-top: 20px;
+}
+</style>
