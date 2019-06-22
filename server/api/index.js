@@ -19,10 +19,15 @@ router.use((req, res, next) => {
   next()
 })
 
+// TODO: max timeout and error handling
+
 router.get('/rates/usd', (req, res) => {
   consola.info('/api/rates/usd')
   axios
-    .get(config.env.USD_RATES_URL, { params: qs.parse(req.query) })
+    .get(config.env.USD_RATES_URL, {
+      params: qs.parse(req.query),
+      timeout: 1000
+    })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
@@ -30,7 +35,10 @@ router.get('/rates/usd', (req, res) => {
 router.get('/rates/usd_tom', (req, res) => {
   consola.info('/api/rates/usd_tom')
   axios
-    .get(config.env.USD_TOM_RATES_URL, { params: qs.parse(req.query) })
+    .get(config.env.USD_TOM_RATES_URL, {
+      params: qs.parse(req.query),
+      timeout: 1000
+    })
     .then(result => res.json(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
@@ -38,7 +46,7 @@ router.get('/rates/usd_tom', (req, res) => {
 router.get('/open_positions/:date', (req, res) => {
   const moexUrl = `${config.env.MOEX_CSV_BASE_URL}/${req.params.date}`
   axios
-    .get(moexUrl)
+    .get(moexUrl, { timeout: 1000 })
     .then(result => res.send(result.data))
     .catch(error => res.status(422).json({ error: error.message }))
 })
@@ -59,7 +67,7 @@ router.get('/holidays', (req, res) => {
   }
 
   axios
-    .get(config.env.CALENDARIFIC_URL, { params: resultParams })
+    .get(config.env.CALENDARIFIC_URL, { params: resultParams, timeout: 1000 })
     .then(result => {
       const processedResult = mapReduceHolidaysResponse(result.data)
       consola.info('holidays', processedResult)

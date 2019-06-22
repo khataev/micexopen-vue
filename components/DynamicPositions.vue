@@ -30,6 +30,7 @@
           id="show-dynamics-btn"
           class="btn btn-info"
           type="submit"
+          size="sm"
           onclick="yaCounter40656204.reachGoal('show-dynamics-btn'); return true;"
           @click="showPositionsDynamic"
           :disabled="!showButtonEnabled"

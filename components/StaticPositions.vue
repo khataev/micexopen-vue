@@ -19,6 +19,7 @@
           id="show-static-btn"
           variant="info"
           type="submit"
+          size="sm"
           :disabled="!showButtonEnabled"
           @click="showOpenPositions"
         >Показать</b-btn>

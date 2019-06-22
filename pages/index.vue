@@ -94,11 +94,18 @@ export default {
   async asyncData(context) {
     // TODO: move Today to store
     const today = moment()
-    const holidays = await context.$axios.$get('/api/holidays', {
-      params: {
-        year: today.year()
-      }
-    })
+    let holidays
+
+    try {
+      holidays = await context.$axios.$get('/api/holidays', {
+        params: {
+          year: today.year()
+        }
+      })
+    } catch (error) {
+      // TODO: show error
+      holidays = []
+    }
 
     return {
       previousTradingDayString: moex.getPreviousTradingDayString(
