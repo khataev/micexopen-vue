@@ -11,6 +11,9 @@
 
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="ml-auto">
+              <b-nav-item href="http://micexopen-old.khataev.com">
+                <b-badge variant="warning">Перейти на старый сайт</b-badge>
+              </b-nav-item>
               <b-nav-item v-b-modal.instructionsModal>Инструкция</b-nav-item>
               <b-nav-item v-b-modal.contactsModal>Связаться с автором</b-nav-item>
               <b-nav-item v-b-modal.thanksModal>Хочу отблагодарить!</b-nav-item>
