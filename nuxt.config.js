@@ -55,7 +55,8 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    { src: '~plugins/vue-select.js', ssr: false }
+    { src: '~/plugins/vue-select.js', ssr: false },
+    { src: '~/plugins/moex.js' }
     // { src: '~plugins/datetime-picker.js', ssr: false }
   ],
 
@@ -74,7 +75,7 @@ module.exports = {
    */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    // baseURL: process.env.BASE_URL || 'https://micexopen.herokuapp.com/'
+    baseURL: process.env.BASE_URL
     // debug: true
   },
 
