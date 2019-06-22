@@ -2,8 +2,8 @@
   <div>
     <!-- Таблица с информацией об открытых позициях -->
     <b-row class="table-row">
-      <b-col xs="7" sm="9" md="9" class="text-right text-header">Дата:</b-col>
-      <b-col xs="3" sm="2" md="2">
+      <b-col cols="7" sm="9" md="9" class="text-right text-header">Дата:</b-col>
+      <b-col cols="3" sm="2" md="2">
         <!-- <input id="datepicker" type="text" class="form-control" /> -->
         <DatePicker
           v-model="datePicker.value"
@@ -14,7 +14,7 @@
           :format="datePicker.format"
         />
       </b-col>
-      <b-col xs="2" sm="1" md="1">
+      <b-col cols="2" sm="1" md="1">
         <b-btn
           id="show-static-btn"
           variant="info"
@@ -25,7 +25,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col xs="12" sm="12" md="12" class="table-row">
+      <b-col cols="12" sm="12" md="12" class="table-row">
         <b-table
           bordered
           hover
@@ -65,10 +65,10 @@
     </b-row>
     <!-- Область с диаграммами -->
     <b-row class="chart-row">
-      <b-col xs="6" sm="6" md="6" class="chart-area">
+      <b-col cols="6" sm="6" md="6" class="chart-area">
         <pie-chart v-if="showChart" :title="fizChartTitle" :chart-data="fizChartData"></pie-chart>
       </b-col>
-      <b-col xs="6" sm="6" md="6" class="chart-area">
+      <b-col cols="6" sm="6" md="6" class="chart-area">
         <pie-chart v-if="showChart" :title="jurChartTitle" :chart-data="jurChartData"></pie-chart>
       </b-col>
     </b-row>

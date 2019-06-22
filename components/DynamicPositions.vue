@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-row class="table-row">
-      <b-col xs="6" sm="6" md="6" class="text-right text-header">Интервал c:</b-col>
-      <b-col xs="2" sm="2" md="2">
+      <b-col cols="6" sm="6" md="6" class="text-right text-header">Интервал c:</b-col>
+      <b-col cols="2" sm="2" md="2">
         <DatePicker
           id="datepickerFrom"
           v-model="datePicker.fromValue"
@@ -13,8 +13,8 @@
           :format="datePicker.format"
         />
       </b-col>
-      <b-col xs="1" sm="1" md="1" class="text-center text-header">по:</b-col>
-      <b-col xs="2" sm="2" md="2">
+      <b-col cols="1" sm="1" md="1" class="text-center text-header">по:</b-col>
+      <b-col cols="2" sm="2" md="2">
         <DatePicker
           id="datepickerTo"
           v-model="datePicker.toValue"
@@ -25,7 +25,7 @@
           :format="datePicker.format"
         />
       </b-col>
-      <b-col xs="1" sm="1" md="1">
+      <b-col cols="1" sm="1" md="1">
         <button
           id="show-dynamics-btn"
           class="btn btn-info"
@@ -38,7 +38,7 @@
     </b-row>
     <!-- Область с диаграммами -->
     <b-row>
-      <b-col xs="12" sm="12" md="12" class="chart-area">
+      <b-col cols="12" sm="12" md="12" class="chart-area">
         <line-chart
           v-if="showChart"
           :height="chartHeight"
@@ -48,7 +48,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col xs="12" sm="12" md="12" class="chart-area">
+      <b-col cols="12" sm="12" md="12" class="chart-area">
         <line-chart
           v-if="showChart"
           :height="chartHeight"
@@ -58,7 +58,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col xs="12" sm="12" md="12" class="chart-area">
+      <b-col cols="12" sm="12" md="12" class="chart-area">
         <line-chart
           v-if="showChart"
           :height="chartHeight"
