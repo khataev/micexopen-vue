@@ -1,6 +1,7 @@
 import express from 'express'
 import axios from 'axios'
 const qs = require('qs')
+const consola = require('consola')
 
 const config = require('../../nuxt.config.js')
 
@@ -19,6 +20,7 @@ router.use((req, res, next) => {
 })
 
 router.get('/rates/usd', (req, res) => {
+  consola.info('/api/rates/usd')
   axios
     .get(config.env.USD_RATES_URL, { params: qs.parse(req.query) })
     .then(result => res.json(result.data))
@@ -26,6 +28,7 @@ router.get('/rates/usd', (req, res) => {
 })
 
 router.get('/rates/usd_tom', (req, res) => {
+  consola.info('/api/rates/usd_tom')
   axios
     .get(config.env.USD_TOM_RATES_URL, { params: qs.parse(req.query) })
     .then(result => res.json(result.data))
@@ -41,6 +44,7 @@ router.get('/open_positions/:date', (req, res) => {
 })
 
 router.get('/holidays', (req, res) => {
+  consola.info('/api/holidays')
   const baseParams = {
     api_key: config.env.CALENDARIFIC_API_KEY,
     country: 'RU'
@@ -57,11 +61,13 @@ router.get('/holidays', (req, res) => {
   axios
     .get(config.env.CALENDARIFIC_URL, { params: resultParams })
     .then(result => {
-      return mapReduceHolidaysResponse(result.data)
+      const processedResult = mapReduceHolidaysResponse(result.data)
+      consola.info('holidays', processedResult)
+      return processedResult
     })
     .then(result => res.json(result))
     .catch(error => {
-      console.log('HOLIDAYS error:', error.message)
+      consola.error('HOLIDAYS error:', error.message)
       res.status(422).json({ error: error.message })
     })
 })
