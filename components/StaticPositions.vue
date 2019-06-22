@@ -4,7 +4,7 @@
     <b-row class="table-row">
       <b-col cols="7" sm="9" md="9" class="text-right text-header">Дата:</b-col>
       <b-col cols="3" sm="2" md="2">
-        <!-- <input id="datepicker" type="text" class="form-control" /> -->
+        <!-- TODO: Future dates prohibited -->
         <DatePicker
           v-model="datePicker.value"
           :language="datePicker.language"
@@ -27,6 +27,7 @@
     <b-row>
       <b-col cols="12" sm="12" md="12" class="table-row">
         <b-table
+          small
           bordered
           hover
           position-details-table

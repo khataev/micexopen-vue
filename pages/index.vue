@@ -141,16 +141,61 @@ export default {
 }
 </script>
 
-<style scoped>
-body {
-  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
-  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-size: 14px;
+<style>
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  body {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 8px;
+  }
+  .text-header {
+    margin-top: 7px;
+    font-size: 10px;
+    font-weight: bold;
+  }
 }
-.text-header {
-  margin-top: 7px;
-  font-size: 16px;
-  font-weight: bold;
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+  body {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 10px;
+  }
+  .text-header {
+    margin-top: 7px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  body {
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+  }
+
+  .text-header {
+    margin-top: 7px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  body {
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+  }
+
+  .text-header {
+    margin-top: 7px;
+    font-size: 16px;
+    font-weight: bold;
+  }
 }
 
 .tabs-area {
