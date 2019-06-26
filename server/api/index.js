@@ -28,7 +28,10 @@ router.get('/rates/usd', (req, res) => {
     .get(config.env.USD_RATES_URL, {
       params: qs.parse(req.query)
     })
-    .then(result => res.json(result.data))
+    .then(result => {
+      console.log('api rates', result.data)
+      res.json(result.data)
+    })
     .catch(error => res.status(422).json({ error: error.message }))
 })
 
@@ -38,7 +41,10 @@ router.get('/rates/usd_tom', (req, res) => {
     .get(config.env.USD_TOM_RATES_URL, {
       params: qs.parse(req.query)
     })
-    .then(result => res.json(result.data))
+    .then(result => {
+      console.log('api spot rates', result.data)
+      res.json(result.data)
+    })
     .catch(error => res.status(422).json({ error: error.message }))
 })
 
