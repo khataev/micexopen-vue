@@ -40,6 +40,10 @@
           :busy="tableBusy"
           @row-clicked="onRowClicked"
         >
+          <div slot="table-busy" class="text-center text-danger my-2">
+            <b-spinner variant="primary" class="align-middle"></b-spinner>
+            <strong>Загрузка...</strong>
+          </div>
           <template name="table-colgroup ">
             <col>
             <colgroup span="2"></colgroup>

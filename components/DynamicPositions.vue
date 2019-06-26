@@ -42,36 +42,41 @@
       </b-col>
     </b-row>
     <!-- Область с диаграммами -->
+    <!-- Доля лонгов -->
     <b-row>
       <b-col cols="12" sm="12" md="12" class="chart-area">
         <line-chart
-          v-if="showChart"
           :height="chartHeight"
           :chart-data="longPercChartData"
           :options="longChartOptions(longPercTitle)"
         ></line-chart>
       </b-col>
     </b-row>
+    <!-- Количество лонгов -->
     <b-row>
       <b-col cols="12" sm="12" md="12" class="chart-area">
         <line-chart
-          v-if="showChart"
           :height="chartHeight"
           :chart-data="longAbsChartData"
           :options="longChartOptions(longAbsTitle)"
         ></line-chart>
       </b-col>
     </b-row>
+    <!-- Курс доллара -->
     <b-row>
-      <b-col cols="12" sm="12" md="12" class="chart-area">
-        <line-chart
-          v-if="showChart"
-          :height="chartHeight"
-          :title="longAbsTitle"
-          :chart-data="ratesChartData"
-          :options="ratesChartOptions()"
-        ></line-chart>
-      </b-col>
+      <div id="usd-rates-spinner" class="text-center">
+        <b-spinner v-if="showUsdSpinner" variant="primary" class="align-middle"></b-spinner>
+      </div>
+      <div id="usd-rates-chart">
+        <b-col cols="12" sm="12" md="12" class="chart-area">
+          <line-chart
+            :height="chartHeight"
+            :title="longAbsTitle"
+            :chart-data="ratesChartData"
+            :options="ratesChartOptions()"
+          ></line-chart>
+        </b-col>
+      </div>
     </b-row>
   </div>
 </template>
@@ -185,7 +190,7 @@ export default {
       longAbsChartData: charts.getDynamicData({}),
       ratesChartData: charts.getRatesData({}),
 
-      showChart: true,
+      showUsdSpinner: false,
       chartHeight: 165
     }
   },
@@ -269,12 +274,12 @@ export default {
         data
       )
     },
-    updateRateChartOptions: function() {},
+    // updateRateChartOptions: function() {},
     ratesProcessCallback: function(rates, spotRates) {
       this.ratesData.usdRates = charts.prepareRatesData(rates)
       this.ratesData.spotUsdRates = charts.prepareRatesData(spotRates)
       this.ratesChartData = charts.getRatesData(this.ratesData)
-      this.updateRateChartOptions()
+      // this.updateRateChartOptions()
     },
     // Функция отображения на графике динамики открытых позиций новой порции данных (открытые позиции за новый день)
     updatePeriodChartWithDataPortion: function(moment, openPositions) {
@@ -352,9 +357,10 @@ export default {
     },
     showPositionsDynamic: async function() {
       this.clearError()
+      this.showUsdSpinner = true
       this.longPercData = initialDynamicDataSet()
       this.longAbsData = initialDynamicDataSet()
-      this.ratesData = initialRatesDataSet()
+      this.ratesProcessCallback([], [])
 
       moex.loadDataPeriod(
         this.startMoment,
@@ -384,6 +390,8 @@ export default {
       } catch (error) {
         this.$emit('error', error)
       }
+
+      this.showUsdSpinner = false
     }
   }
 }
@@ -392,5 +400,15 @@ export default {
 <style scoped>
 .tab-content {
   padding-top: 20px;
+}
+#usd-rates-spinner {
+  position: absolute;
+  width: 100%;
+  border: 2px;
+  line-height: 400px;
+}
+#usd-rates-chart {
+  position: absolute;
+  width: 100%;
 }
 </style>
