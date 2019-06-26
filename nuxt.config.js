@@ -15,7 +15,7 @@ module.exports = {
       {
         name: 'keywords',
         content:
-          'открытые позиции, ммвб, динамика, анализ, биржа, трейдинг, графическое представление, визуализация'
+          'открытые позиции, ммвб, динамика, анализ, биржа, трейдинг, графическое представление, визуализация, фьючерс газпром, фьючерс сбербанк, фьючерс доллар, фьючерс нефть'
       },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
@@ -55,8 +55,8 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    { src: '~/plugins/vue-select.js', ssr: false },
-    { src: '~/plugins/moex.js' }
+    { src: '~/plugins/vue-select.js', ssr: false }
+    // { src: '~/plugins/moex.js' }
     // { src: '~plugins/datetime-picker.js', ssr: false }
   ],
 
