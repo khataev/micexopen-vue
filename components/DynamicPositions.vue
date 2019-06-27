@@ -372,6 +372,7 @@ export default {
       )
 
       try {
+        console.log('get /api/rates/usd')
         const usdRates = await this.$axios.$get('/api/rates/usd', {
           params: {
             start_date: this.startMoment.format('YYYYMMDD'),
@@ -380,6 +381,7 @@ export default {
         })
 
         console.log('usdRates', usdRates)
+        console.log('get /api/rates/usd_tom')
 
         const spotUsdRates = await this.$axios.$get('/api/rates/usd_tom', {
           params: {

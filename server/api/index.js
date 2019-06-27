@@ -23,7 +23,7 @@ router.use((req, res, next) => {
 // TODO: max timeout and error handling
 
 router.get('/rates/usd', (req, res) => {
-  consola.info('/api/rates/usd')
+  consola.info('get /api/rates/usd')
   axios
     .get(config.env.USD_RATES_URL, {
       params: qs.parse(req.query)
@@ -36,7 +36,7 @@ router.get('/rates/usd', (req, res) => {
 })
 
 router.get('/rates/usd_tom', (req, res) => {
-  consola.info('/api/rates/usd_tom')
+  consola.info('get /api/rates/usd_tom')
   axios
     .get(config.env.USD_TOM_RATES_URL, {
       params: qs.parse(req.query)
@@ -57,7 +57,6 @@ router.get('/open_positions/:date', (req, res) => {
 })
 
 router.get('/holidays', (req, res) => {
-  consola.info('/api/holidays')
   const baseParams = {
     api_key: config.env.CALENDARIFIC_API_KEY,
     country: 'RU'
@@ -71,6 +70,8 @@ router.get('/holidays', (req, res) => {
       .map(holiday => holiday.date.iso)
   }
 
+  consola.info('get /api/holidays')
+  consola.info('config.env.CALENDARIFIC_URL', config.env.CALENDARIFIC_URL)
   axios
     .get(config.env.CALENDARIFIC_URL, {
       params: resultParams,

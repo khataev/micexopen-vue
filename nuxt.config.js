@@ -23,21 +23,13 @@ module.exports = {
   },
 
   env: {
-    // BASE_URL: process.env.BASE_URL || 'https://micexopen.herokuapp.com/',
-    USD_RATES_URL:
-      process.env.USD_RATES_URL ||
-      'https://vmnet.herokuapp.com/api/v1/rates/usd.json',
-    USD_TOM_RATES_URL:
-      process.env.USD_TOM_RATES_URL ||
-      'https://vmnet.herokuapp.com/api/v1/spot_rates/usdrub_tom.json',
-    CALENDARIFIC_URL:
-      process.env.CALENDARIFIC_URL ||
-      'https://calendarific.com/api/v2/holidays',
+    BASE_URL: process.env.BASE_URL,
+    USD_RATES_URL: process.env.USD_RATES_URL,
+    USD_TOM_RATES_URL: process.env.USD_TOM_RATES_URL,
+    CALENDARIFIC_URL: process.env.CALENDARIFIC_URL,
     CALENDARIFIC_API_KEY: process.env.CALENDARIFIC_API_KEY,
     // `http://moex.com/ru/derivatives/open-positions-csv.aspx?d=${date}&t=1`
-    MOEX_CSV_BASE_URL:
-      process.env.MOEX_CSV_BASE_URL ||
-      'https://vmnet.herokuapp.com/open_positions',
+    MOEX_CSV_BASE_URL: process.env.MOEX_CSV_BASE_URL,
     INITIAL_FEATURE_CODE: process.env.INITIAL_FEATURE_CODE || 'Si_F'
   },
 
@@ -75,7 +67,8 @@ module.exports = {
    */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.BASE_URL
+    baseURL: process.env.BASE_URL,
+    browserBaseURL: process.env.BASE_URL
     // debug: true
   },
 
