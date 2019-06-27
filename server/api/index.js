@@ -9,7 +9,6 @@ const config = require('../../nuxt.config.js')
 
 // Create express router
 const router = express.Router()
-const MAX_API_TIMEOUT = 3000
 
 const corsOptions = {
   origin: 'http://micexopen.khataev.com',
@@ -81,12 +80,12 @@ router.get('/holidays', (req, res) => {
   axios
     .get(config.env.CALENDARIFIC_URL, {
       params: resultParams,
-      timeout: MAX_API_TIMEOUT
+      timeout: config.env.MAX_API_TIMEOUT
     })
     .then(result => mapReduceHolidaysResponse(result.data))
     .then(result => res.json(result))
     .catch(error => {
-      console.log('HOLIDAYS error:', error)
+      // console.log('HOLIDAYS error:', error)
       res.status(422).json({ error: error.message })
     })
 })

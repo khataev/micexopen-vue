@@ -30,7 +30,8 @@ module.exports = {
     CALENDARIFIC_API_KEY: process.env.CALENDARIFIC_API_KEY,
     // `http://moex.com/ru/derivatives/open-positions-csv.aspx?d=${date}&t=1`
     MOEX_CSV_BASE_URL: process.env.MOEX_CSV_BASE_URL,
-    INITIAL_FEATURE_CODE: process.env.INITIAL_FEATURE_CODE || 'Si_F'
+    INITIAL_FEATURE_CODE: process.env.INITIAL_FEATURE_CODE || 'Si_F',
+    MAX_API_TIMEOUT: process.env.MAX_API_TIMEOUT || 10000
   },
 
   /*
