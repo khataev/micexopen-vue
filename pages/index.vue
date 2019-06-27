@@ -112,8 +112,9 @@ export default {
           year: today.year()
         }
       })
+      console.log('holidays', holidays)
     } catch (error) {
-      // TODO: show error
+      console.log('error fetching holidays', error)
       holidays = []
     }
 

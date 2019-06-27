@@ -78,21 +78,15 @@ router.get('/holidays', (req, res) => {
       .map(holiday => holiday.date.iso)
   }
 
-  consola.info('get /api/holidays')
-  consola.info('config.env.CALENDARIFIC_URL', config.env.CALENDARIFIC_URL)
   axios
     .get(config.env.CALENDARIFIC_URL, {
       params: resultParams,
       timeout: MAX_API_TIMEOUT
     })
-    .then(result => {
-      const processedResult = mapReduceHolidaysResponse(result.data)
-      consola.info('holidays', processedResult)
-      return processedResult
-    })
+    .then(result => mapReduceHolidaysResponse(result.data))
     .then(result => res.json(result))
     .catch(error => {
-      consola.error('HOLIDAYS error:', error.message)
+      console.log('HOLIDAYS error:', error)
       res.status(422).json({ error: error.message })
     })
 })
