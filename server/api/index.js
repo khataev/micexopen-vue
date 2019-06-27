@@ -2,6 +2,8 @@ import express from 'express'
 import axios from 'axios'
 const qs = require('qs')
 const consola = require('consola')
+const app = express()
+const cors = require('cors')
 
 const config = require('../../nuxt.config.js')
 
@@ -9,9 +11,15 @@ const config = require('../../nuxt.config.js')
 const router = express.Router()
 const MAX_API_TIMEOUT = 3000
 
+const corsOptions = {
+  origin: 'http://micexopen.khataev.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions))
+
 // Transform req & res to have the same API as express
 // So we can use res.status() & res.json()
-const app = express()
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
   Object.setPrototypeOf(res, app.response)
