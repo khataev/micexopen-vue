@@ -1,211 +1,190 @@
 <template>
-  <section class="container">
-    <b-row>
-      <p>
-        Необходимость в данном ресурсе у автора перестала существовать. Если
-        среди посетителей есть те, кому он полезен или очень необходим - прошу
-        написать в личку. Для поддержания работоспособности ресурса необходимо
-        всего лишь 200р на хостинг в месяц. При отсутствии таковых сервис будет
-        погашен 01.04.2019
-      </p>
+  <div>
+    <b-row class="top-row" v-if="showUserMessage">
+      <b-col>
+        <p class="text-center">
+          <b-alert variant="success" show>
+            🎉🎉🎉 Произошло долгожданное обновление сайта (немного подробностей
+            <b-link v-b-modal.instructionsModal>тут</b-link>)&nbsp;🎉🎉🎉
+          </b-alert>
+        </p>
+      </b-col>
     </b-row>
     <!-- Комбобокс с инструментами -->
     <b-row>
-      <div class="col-xs-12 col-sm-12 col-md-12">
-        <select class="select-features-list" style="width: 100%"> </select>
-      </div>
+      <v-select
+        v-model="selectedFeature"
+        class="select-features-list"
+        :options="featuresListRaw"
+        :clearable="true"
+        :searchable="true"
+        :filterable="true"
+        :close-on-select="true"
+        :placeholder="selectPlaceholder"
+      />
     </b-row>
+
+    <!-- Область для показа ошибки -->
+    <b-row class="error-area">{{ errorText }}</b-row>
+
     <!-- Табы -->
-    <div class="row tabs-area">
-      <ul class="nav nav-tabs">
-        <li class="active">
-          <a data-toggle="tab" href="#static">Открытые позиции на дату</a>
-        </li>
-        <li>
-          <a
-            data-toggle="tab"
-            href="#dynamic"
-            onclick="yaCounter40656204.reachGoal('dynamics-tab'); return true;"
-            >Динамика открытых позиций</a
-          >
-        </li>
-      </ul>
-    </div>
-    <b-row class="tab-content">
-      <div class="error-area"></div>
-      <b-row id="static" class="tab-pane fade in active">
-        <!-- Таблица с информацией об открытых позициях -->
-        <div class="row table-row">
-          <div class="col-xs-7 col-sm-9 col-md-9 text-right text-header">
-            Дата:
-          </div>
-          <div class="col-xs-3 col-sm-2 col-md-2">
-            <input id="datepicker" type="text" class="form-control" />
-          </div>
-          <div class="col-xs-1 col-sm-1 col-md-1">
-            <button id="show-static-btn" class="btn btn-info" type="submit">
-              Показать
-            </button>
-          </div>
-        </div>
-        <b-row>
-          <div class="col-xs-12 col-sm-12 col-md-12 table-row">
-            <b-table bordered hover position-details-table>
-              <thead>
-                <tr>
-                  <td rowspan="2"></td>
-                  <th colspan="2" scope="colgroup">Физические лица</th>
-                  <th colspan="2" scope="colgroup">Юридические лица</th>
-                  <th rowspan="2" scope="colgroup">
-                    Совокупный объем открытых позиций
-                  </th>
-                </tr>
-                <tr>
-                  <th scope="col">Длинные позиции</th>
-                  <th scope="col">Короткие позиции</th>
-                  <th scope="col">Длинные позиции</th>
-                  <th scope="col">Короткие позиции</th>
-                </tr>
-              </thead>
-              <tr>
-                <th scope="row">Количество договоров (контрактов), шт.</th>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  Относительное изменение количества договоров (контрактов) по
-                  отношению к предыдущему дню, в %
-                </th>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <th scope="row">Количество лиц, имеющих открытые позиции</th>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  Изменение количества договоров (контрактов) по отношению к
-                  предыдущему дню, шт.
-                </th>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-              </tr>
-            </b-table>
-          </div>
-        </b-row>
-        <!-- Область с диаграммами -->
-        <div class="row chart-row">
-          <div class="col-xs-6 col-sm-6 col-md-6 chart-area">
-            <canvas id="fizPositionChart"></canvas>
-          </div>
-          <div class="col-xs-6 col-sm-6 col-md-6 chart-area">
-            <canvas id="jurPositionChart"></canvas>
-          </div>
-        </div>
-      </b-row>
-      <div id="dynamic" class="tab-pane fade">
-        <div class="row table-row">
-          <div class="col-xs-6 col-sm-6 col-md-6 text-right text-header">
-            Интервал c:
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-2">
-            <input id="datepickerFrom" type="text" class="form-control" />
-          </div>
-          <div class="col-xs-1 col-sm-1 col-md-1 text-center text-header">
-            по:
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-2">
-            <input id="datepickerTo" type="text" class="form-control" />
-          </div>
-          <div class="col-xs-1 col-sm-1 col-md-1">
-            <button
-              id="show-dynamics-btn"
-              class="btn btn-info"
-              type="submit"
-              onclick="yaCounter40656204.reachGoal('show-dynamics-btn'); return true;"
-            >
-              Показать
-            </button>
-          </div>
-        </div>
-        <!-- Область с диаграммами -->
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
-            <canvas id="openPositionsDynamicsChart" height="120"></canvas>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
-            <canvas id="openPositionsDynamicsChart2" height="120"></canvas>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 chart-area">
-            <div class="rates-error-border">
-              <h3 class="rates-error text-center">
-                Здесь должен быть график курса доллара. К сожалению, сервис в
-                данный момент недоступен, либо произошла ошибка и я работаю над
-                ее устранением
-              </h3>
-            </div>
-            <canvas id="currencyRatesChart" height="120"></canvas>
-          </div>
-        </div>
-      </div>
+    <b-row>
+      <b-col>
+        <b-tabs class="tabs-area">
+          <b-tab title="Открытые позиции на дату">
+            <!-- :open-positions="openPositions" -->
+            <StaticPositionsTab
+              :feature="selectedFeature"
+              :start-date="startDate"
+              :show-button-enabled="!!selectedFeature"
+              @error="onError"
+              @clearError="onClearError"
+            />
+          </b-tab>
+
+          <b-tab title="Динамика открытых позиций">
+            <DynamicPositionsTab
+              :feature="selectedFeature"
+              :from-date="startDate"
+              :to-date="startDate"
+              :show-button-enabled="!!selectedFeature"
+              @error="onError"
+              @clearError="onClearError"
+            />
+          </b-tab>
+        </b-tabs>
+      </b-col>
     </b-row>
-  </section>
+  </div>
 </template>
 
 <script>
+import StaticPositionsTab from '~/components/StaticPositions.vue'
+import DynamicPositionsTab from '~/components/DynamicPositions.vue'
+
+const moment = require('moment')
+
+// import app from './../plugins/scripts'
+import { Moex } from './../plugins/moex'
+
+const moex = new Moex()
+
+// TODO: Yandex metrica - check
+const scriptString =
+  '(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};' +
+  'm[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})' +
+  "(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');" +
+  "ym(40656204, 'init', {" +
+  'clickmap:true,' +
+  'trackLinks:true,' +
+  'accurateTrackBounce:true,' +
+  'webvisor:true' +
+  '});'
+
 export default {
-  components: {}
+  head: {
+    script: [{ innerHTML: scriptString, type: 'text/javascript' }],
+    __dangerouslyDisableSanitizers: ['script']
+  },
+  components: {
+    StaticPositionsTab,
+    DynamicPositionsTab
+  },
+  data() {
+    return {
+      selectPlaceholder: ' Загрузка...',
+      errorText: null,
+      // Feature items dropdown
+      featuresListRaw: [],
+      selectedFeature: null,
+      openPositions: null,
+      showUserMessage: moment().isSameOrBefore('2019-06-30')
+    }
+  },
+  async asyncData(context) {
+    // TODO: move Today to store
+    const today = moment()
+    let holidays
+
+    try {
+      holidays = await context.$axios.$get('/api/holidays', {
+        params: {
+          year: today.year()
+        }
+      })
+      console.log('holidays', holidays)
+    } catch (error) {
+      console.log('error fetching holidays', error)
+      holidays = []
+    }
+
+    return {
+      previousTradingDayString: moex.getPreviousTradingDayString(
+        today,
+        holidays
+      )
+    }
+  },
+  computed: {
+    startDate() {
+      return moment(this.previousTradingDayString)
+    }
+  },
+  mounted() {
+    moex
+      .loadMoexCsv(this.startDate.format(moex.defaultDateFormat))
+      .then(this.onMoexComplete)
+      .catch(this.onError)
+  },
+  methods: {
+    onMoexComplete(openPositions) {
+      this.openPositions = openPositions
+
+      for (const key in openPositions) {
+        if (typeof openPositions[key] === 'function') continue
+
+        this.featuresListRaw.push({
+          code: key,
+          label: openPositions[key].name
+        })
+      }
+      this.selectedFeature = this.featuresListRaw.filter(
+        feature => feature.code === process.env.INITIAL_FEATURE_CODE
+      )[0]
+    },
+    onError(_error) {
+      // this.errorText = error && error.message
+      this.errorText =
+        'Произошла ошибка доступа к одному из сервисов, попробуйте еще раз'
+    },
+    onClearError() {
+      this.errorText = ''
+    }
+  }
 }
 </script>
 
-<style>
-/* .container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-} 
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+<style scoped>
+.top-row {
+  margin-top: 10px;
+  margin-bottom: -20px;
+}
+.tabs-area {
+  margin-top: 20px;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.error-area {
+  color: red;
 }
 
-.links {
-  padding-top: 15px;
-} */
+.table-row {
+  margin-top: 20px;
+}
+
+.select-features-list {
+  width: 97%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 20px;
+}
 </style>
