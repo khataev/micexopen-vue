@@ -1,12 +1,10 @@
 <template>
   <div>
-    <b-row class="top-row" v-if="showUserMessage">
+    <b-row v-if="showUserMessage" class="top-row">
       <b-col>
-        <p class="text-center">
-          <b-alert variant="success" show>
-            🎉🎉🎉 Произошло долгожданное обновление сайта (немного подробностей
-            <b-link v-b-modal.instructionsModal>тут</b-link>)&nbsp;🎉🎉🎉
-          </b-alert>
+        <p>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <b-alert variant="success" show v-html="userMessage" />
         </p>
       </b-col>
     </b-row>
@@ -98,7 +96,8 @@ export default {
       featuresListRaw: [],
       selectedFeature: null,
       openPositions: null,
-      showUserMessage: moment().isSameOrBefore('2019-06-30')
+      showUserMessage: this.$store.state.showUserMessage,
+      userMessage: this.$store.state.userMessage
     }
   },
   async asyncData(context) {
