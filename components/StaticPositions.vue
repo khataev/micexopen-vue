@@ -45,7 +45,7 @@
             <strong>Загрузка...</strong>
           </div>
           <template name="table-colgroup ">
-            <col>
+            <col />
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <colgroup></colgroup>
@@ -68,6 +68,7 @@
           <template slot="jurLong" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
           <template slot="fizShort" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
           <template slot="jurShort" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
+          <template slot="total" slot-scope="data">{{ formatNumber(data.item.code, data.value) }}</template>
         </b-table>
       </b-col>
     </b-row>
@@ -94,25 +95,6 @@ import { Moex } from './../plugins/moex'
 const numeral = require('numeral')
 const moment = require('moment')
 const moex = new Moex()
-
-// const moex = require('./../plugins/moex.js')
-
-// const date = new Date(2016, 8, 16)
-
-// const date1 = app.getPreviousTradingDay().toDate()
-// const date2 = moment('2016-09-16').toDate()
-// const date3 = DateTime.local(2016, 9, 16).toJSDate()
-
-// TODO: why moment.toDate() is not a date
-// console.log(typeof date)
-// console.log(typeof date2)
-// console.log(typeof date3)
-
-// console.log(date instanceof Date)
-// console.log(date2 instanceof Date)
-// console.log(date3 instanceof Date)
-
-// console.log('----------------------')
 
 const tableRowHeaders = {
   position: 'Количество договоров (контрактов), шт.',
@@ -234,15 +216,6 @@ export default {
   },
   mounted() {
     this.setNumeralSettings()
-    // console.log(typeof date)
-    // console.log(typeof date2)
-    // console.log(typeof date3)
-    // console.log(date instanceof Date)
-    // console.log(date2 instanceof Date)
-    // console.log(date3 instanceof Date)
-    // console.log(this.validateDateInput(date))
-    // console.log(this.validateDateInput(date2))
-    // console.log(this.validateDateInput(date3))
   },
   methods: {
     clearError: function() {

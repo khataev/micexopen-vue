@@ -66,7 +66,6 @@ export const OpenPositions = function() {
     return name
   }
   this.addPosition = function(position) {
-    // debugger
     const isinkey = `${position.isin}_${position.contract_type}`
     if (this[isinkey] == null) {
       this[isinkey] = new FeatureOpenPositions({
@@ -87,6 +86,14 @@ export const OpenPositions = function() {
       const jurLong = jur.long
       const fizShort = fiz.short
       const jurShort = jur.short
+      // semi manual export of data to console
+      // if (isinkey === 'GOLD_F') {
+      //   // debugger
+      //   const str = `${position.moment},${fizLong.position},${
+      //     fizShort.position
+      //   },${jurLong.position},${jurShort.position}`
+      //   console.log(str)
+      // }
       this[isinkey].total = new DirectionPositions({
         changePrevWeekAbs:
           fizLong.changePrevWeekAbs +
@@ -172,6 +179,9 @@ export const Moex = function() {
   }
 
   this.getPreviousTradingDay = function(date = moment(), holidays) {
+    const fromEnv = moment(process.env.PREVIOUS_TRADING_DAY)
+    if (process.env.PREVIOUS_TRADING_DAY && fromEnv.isValid()) return fromEnv
+
     let result
     switch (date.day()) {
       case 0:
